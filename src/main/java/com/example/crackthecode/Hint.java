@@ -9,6 +9,7 @@ package com.example.crackthecode;
  * @author Danielnaor
  */
 public class Hint {
+
     private String message;
     private int correctCount;
     private boolean correctlyPlaced;
@@ -18,8 +19,6 @@ public class Hint {
         this.correctCount = correctCount;
         this.correctlyPlaced = correctlyPlaced;
     }
-    
-    
 
     public Hint(String message) {
         this.message = message;
@@ -49,6 +48,5 @@ public class Hint {
     public String toString() {
         return "Hint{" + "message=" + message + ", correctCount=" + correctCount + ", correctlyPlaced=" + correctlyPlaced + '}';
     }
-    
-    
+
 }
