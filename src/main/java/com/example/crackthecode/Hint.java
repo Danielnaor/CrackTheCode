@@ -4,19 +4,35 @@
  */
 package com.example.crackthecode;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Danielnaor
  */
-public class Hint {
+public class Hint implements Cloneable, Serializable {
 
     private String message;
     private int correctCount;
+    private int countCorrectNumbersAndCorrectPlacement;
+    private int countCorrectNumbersAndIncorrectPlacement;
     private boolean correctlyPlaced;
 
     public Hint(String message, int correctCount, boolean correctlyPlaced) {
         this.message = message;
         this.correctCount = correctCount;
+        this.correctlyPlaced = correctlyPlaced;
+
+        this.countCorrectNumbersAndCorrectPlacement = -1;
+        this.countCorrectNumbersAndIncorrectPlacement = -1;
+
+    }
+
+    public Hint(String message, int correctCount, int countCorrectNumbersAndCorrectPlacement, int countCorrectNumbersAndIncorrectPlacement, boolean correctlyPlaced) {
+        this.message = message;
+        this.correctCount = correctCount;
+        this.countCorrectNumbersAndCorrectPlacement = countCorrectNumbersAndCorrectPlacement;
+        this.countCorrectNumbersAndIncorrectPlacement = countCorrectNumbersAndIncorrectPlacement;
         this.correctlyPlaced = correctlyPlaced;
     }
 
@@ -44,9 +60,41 @@ public class Hint {
         this.correctlyPlaced = correctlyPlaced;
     }
 
+    public int getCountCorrectNumbersAndCorrectPlacement() {
+        return countCorrectNumbersAndCorrectPlacement;
+    }
+
+    public void setCountCorrectNumbersAndCorrectPlacement(int countCorrectNumbersAndCorrectPlacement) {
+        this.countCorrectNumbersAndCorrectPlacement = countCorrectNumbersAndCorrectPlacement;
+    }
+
+    public int getCountCorrectNumbersAndIncorrectPlacement() {
+        return countCorrectNumbersAndIncorrectPlacement;
+    }
+
+    public void setCountCorrectNumbersAndIncorrectPlacement(int countCorrectNumbersAndIncorrectPlacement) {
+        this.countCorrectNumbersAndIncorrectPlacement = countCorrectNumbersAndIncorrectPlacement;
+    }
+
     @Override
     public String toString() {
-        return "Hint{" + "message=" + message + ", correctCount=" + correctCount + ", correctlyPlaced=" + correctlyPlaced + '}';
+        if (countCorrectNumbersAndCorrectPlacement == -1 && countCorrectNumbersAndIncorrectPlacement == -1) {
+            return "Hint{" + "message=" + message + ", correctCount=" + correctCount + ", correctlyPlaced=" + correctlyPlaced + '}';
+        }
+        return "Hint{" + "message=" + message + ", correctCount=" + correctCount + ", countCorrectNumbersAndCorrectPlacement=" + countCorrectNumbersAndCorrectPlacement + ", countCorrectNumbersAndIncorrectPlacement=" + countCorrectNumbersAndIncorrectPlacement + ", correctlyPlaced=" + correctlyPlaced + '}';
+    }
+
+    @Override
+    public Object clone() {
+        try {
+            return (Hint) super.clone();
+        } catch (CloneNotSupportedException e) {
+            return new Hint(this.message, this.getCorrectCount(), this.getCountCorrectNumbersAndCorrectPlacement(), this.getCountCorrectNumbersAndIncorrectPlacement(), this.isCorrectlyPlaced());
+        }
+    }
+
+    public Hint(Hint that) {
+        this(that.message, that.correctCount, that.countCorrectNumbersAndCorrectPlacement, that.countCorrectNumbersAndIncorrectPlacement, that.correctlyPlaced);
     }
 
 }

@@ -4,15 +4,21 @@
  */
 package com.example.crackthecode;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Danielnaor
  */
-// Clue.java
-public class Clue {
+// import Cloneable 
+public class Clue implements Cloneable, Serializable {
 
     private Integer[] combination;
     private Hint hint;
+
+    public Clue(Clue that) {
+        this(that.getCombination(), new Hint(that.getHint()));
+    }
 
     public Clue(Integer[] combination, Hint hint) {
         this.combination = combination;
@@ -46,6 +52,19 @@ public class Clue {
         }
         sb.append("], hint=").append(hint).append('}');
         return sb.toString();
+    }
+
+    @Override
+    public Object clone() {
+        Clue clue = null;
+        try {
+            clue = (Clue) super.clone();
+        } catch (CloneNotSupportedException e) {
+            clue = new Clue(
+                    this.getCombination(), this.getHint());
+        }
+        clue.hint = (Hint) this.hint.clone();
+        return clue;
     }
 
 }
