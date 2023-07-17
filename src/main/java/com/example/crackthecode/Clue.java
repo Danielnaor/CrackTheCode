@@ -42,16 +42,13 @@ public class Clue implements Cloneable, Serializable {
     }
 
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Clue{combination=[");
+        String s = "";
         for (int i = 0; i < combination.length; i++) {
-            sb.append(combination[i]);
-            if (i < combination.length - 1) {
-                sb.append(", ");
-            }
+            s += combination[i] + " ";
         }
-        sb.append("], hint=").append(hint).append('}');
-        return sb.toString();
+        s += " " + hint.toString();
+        return s;
+
     }
 
     @Override

@@ -83,10 +83,12 @@ public class Hint implements Cloneable, Serializable {
 
     @Override
     public String toString() {
-        if (countCorrectNumbersAndCorrectPlacement == -1 && countCorrectNumbersAndIncorrectPlacement == -1) {
-            return "Hint{" + "message=" + message + ", correctCount=" + correctCount + ", correctlyPlaced=" + correctlyPlaced + '}';
-        }
-        return "Hint{" + "message=" + message + ", correctCount=" + correctCount + ", countCorrectNumbersAndCorrectPlacement=" + countCorrectNumbersAndCorrectPlacement + ", countCorrectNumbersAndIncorrectPlacement=" + countCorrectNumbersAndIncorrectPlacement + ", correctlyPlaced=" + correctlyPlaced + '}';
+        String S = "";
+
+        S += "Message: " + this.message + " correctCount: " + this.correctCount + " countCorrectNumbersAndCorrectPlacement: " + this.countCorrectNumbersAndCorrectPlacement + " countCorrectNumbersAndIncorrectPlacement: " + this.countCorrectNumbersAndIncorrectPlacement + " correctlyPlaced: " + this.correctlyPlaced;   
+
+        return S;
+       
     }
 
     @Override

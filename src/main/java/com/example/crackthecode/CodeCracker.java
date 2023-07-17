@@ -60,17 +60,11 @@ public class CodeCracker implements Cloneable, Serializable {
 
         // go thorugh all combinations and add all the numbers to a list then add any number from 0-9 that is not in that list to the banned list
         loopThroughAllCombinationsAndAddNumbersToBannedList();
-        int indexTest = 0;
-        for (List<Integer> bannedList : bannedNumbers) {
-            System.out.println("bannedList at index " + indexTest + " : " + bannedList);
-            indexTest++;
-        }
+        
 
         // first step to solve it will be to Check if there is a clue hint where none of the numbers are correct.
         // if so              // add it that clue's combinations into the banned list of all indexes and then delete that clue
-        System.out.println("\n");
         if (checkNothingCorrect()) {
-            System.out.println("there is a statemnt where NothingCorrect");
             // add it that clue's combinations into the banned list of all indexes, then loop through all clues and remove numbers from the banned list
             Integer[] combinationDigits = clues.get(ClueNothingCorrectIndex).getCombination();
             for (int i = 0; i < combinationDigits.length; i++) {
@@ -96,23 +90,12 @@ public class CodeCracker implements Cloneable, Serializable {
 
         // loop trougth all clues and check if any clue has numbers placed wrongly if so add all those numbers to that baned list too. 
         loopThroughAllCluesAndAddNumbersToBannedListIfNotCorrectlyPlaced();
-
-        // print the banned list
-        int index = 0;
-        for (List<Integer> bannedList : bannedNumbers) {
-            System.out.println("bannedList at index number " + index + " : " + bannedList);
-            index++;
-        }
+        
 
         SolveCombinationsCracked();
 
         // loop thorught all the combinations and remove numbers that are in the banned list
-        loopThroughAllCombinationsAndRemovedBannedNumbers();
-
-        System.out.println("\nUnsolved clues: ");
-        for (Clue clue : clues) {
-            System.out.println(clue);
-        }
+        loopThroughAllCombinationsAndRemovedBannedNumbers();        
 
         System.out.println("\n");
 
@@ -125,10 +108,7 @@ public class CodeCracker implements Cloneable, Serializable {
 
             return code;
         }  else {
-            System.out.println("Unsolved clues: ");
-            for (Clue clue : clues) {
-                System.out.println(clue);
-            }
+            
 
                     SolveCombinationsCracked();
 
@@ -157,20 +137,10 @@ public class CodeCracker implements Cloneable, Serializable {
                 foundCode = true;
                 return code;
 
-            } else {
+            } 
+            
 
-                // loop through and print all the possible combinations
-                /*  System.out.println("All possible combinations: ");
-                for (Integer[] combination : allPosibleArrayList) {
-                    System.out.println(Arrays.toString(combination));
-                }
-                 */
-            }
-
-            // print the Arraylist CorrectNumbersButWrongPlace
-            System.out.println("CorrectNumbersButWrongPlace: " + CorrectNumbersButWrongPlace);
-
-            System.out.println("Unsolved code: " + Arrays.toString(code));
+            
             return null;
 
         }
@@ -193,7 +163,6 @@ public class CodeCracker implements Cloneable, Serializable {
             }
         }
 
-        System.out.println("allNumbersPresentInOneOfTheCombinations: " + allNumbersPresentInOneOfTheCombinations);
 
         // loop through all numbers from 0-9
         for (int i = 0; i < 10; i++) {
@@ -320,11 +289,7 @@ public class CodeCracker implements Cloneable, Serializable {
                     }
                 }
                 
-                System.out.println("CorrectNumbersButWrongPlace:");
-                for(Integer digit: CorrectNumbersButWrongPlace){
-                    System.out.println(digit);
-                    
-                }
+                
                 indexesOfSolvedHintsThatNeedsToBeRemoved.add(j);
             }
 

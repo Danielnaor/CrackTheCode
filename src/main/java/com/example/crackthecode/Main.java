@@ -47,6 +47,12 @@ public class Main implements Cloneable, Serializable {
                 deepCopyOfClues.add(shallowCopy);
             }
                 CodeCracker codeCracker = new CodeCracker(deepCopyOfClues);
+                // print the hints
+                for (Clue clue : deepCopyOfClues) {
+                    System.out.println(clue);
+                }
+
+
 
                 Integer[] code = codeCracker.crackCode();
                 boolean foundCode = codeCracker.isFoundCode();
@@ -55,6 +61,7 @@ public class Main implements Cloneable, Serializable {
 // make sure the code is correct by checking it with the clues and the codevalidator
                     CodeValidator codeValidator = new CodeValidator(clues, code, codeCracker.getAllPosibleArrayList());
                     codeValidator.validateAllPossibleSolutionsWithHints();
+
 
                 } else {
 
@@ -122,14 +129,9 @@ public class Main implements Cloneable, Serializable {
         allTestCases.add(clues);
         clues = new ArrayList<>();
 
-        // test case 5:
-        // 8 9 5 1 Two digits are correct  but wrongly placed
-        // 2 1 6 9 One digit is correct and well placed and Another digit right but in wrongly placed
-        // 3 6 9 4 One digit right and in the right place. Another digit right but in wrong place.
-        // 4 7 2 1 One digit right and in the right place. Another digit right but in wrong place.
-        // 1 2 3 7 Three digits are right but all are at wrong place.
 
-        clues.add(new Clue(new Integer[]{8, 9, 5, 1}, new Hint("Two digits are correct  but wrongly placed", 2, 0, 2, false)));
+        // test case 5:
+        clues.add(new Clue(new Integer[]{8, 9, 5, 1}, new Hint("Two digits are correct but wrongly placed", 2, 0, 2, false)));
         clues.add(new Clue(new Integer[]{2, 1, 6, 9}, new Hint("One digit is correct and well placed and Another digit right but in wrongly placed", 2, 1, 1, false)));
         clues.add(new Clue(new Integer[]{3, 6, 9, 4}, new Hint("One digit right and in the right place. Another digit right but in wrong place.", 2, 1, 1, false)));
         clues.add(new Clue(new Integer[]{4, 7, 2, 1}, new Hint("One digit right and in the right place. Another digit right but in wrong place.", 2, 1, 1, false)));

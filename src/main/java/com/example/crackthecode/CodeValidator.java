@@ -83,7 +83,6 @@ public class CodeValidator {
     // (matching the hint with the possible code meants that the number of correct numbers and correct placement and the number of correct numbers and incorrect placement are the same as the hint)
     //  Integer[] combinationT = new Integer[]{3,8,4,1};
     public void validateAllPossibleSolutionsWithHints() {
-System.out.println("validateAllPossibleSolutionsWithHints: " );
 
         HashMap<Integer, Integer[]> allPossibleSolutionsHashMap = convertArrayListToHashMap(allPosibleArrayList);
 
