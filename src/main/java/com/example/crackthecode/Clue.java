@@ -10,7 +10,7 @@ import java.io.Serializable;
  *
  * @author Danielnaor
  */
-// import Cloneable 
+
 public class Clue implements Cloneable, Serializable {
 
     private Integer[] combination;
@@ -41,6 +41,7 @@ public class Clue implements Cloneable, Serializable {
         this.hint = hint;
     }
 
+    @Override
     public String toString() {
         String s = "";
         for (int i = 0; i < combination.length; i++) {
