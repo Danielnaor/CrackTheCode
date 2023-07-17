@@ -117,6 +117,9 @@ public class CodeCracker implements Cloneable, Serializable {
         System.out.println("\n");
 
         SolveCombinationsCracked();
+        
+        
+        
 
         if (checkIfCodeWasFound()) {
 
@@ -126,6 +129,8 @@ public class CodeCracker implements Cloneable, Serializable {
             for (Clue clue : clues) {
                 System.out.println(clue);
             }
+
+                    SolveCombinationsCracked();
 
             // all possible combinations are in the clues
             allPosibleArrayList = getAllPossibleCombinations();
@@ -229,7 +234,7 @@ public class CodeCracker implements Cloneable, Serializable {
         // for each loop banned list, add the number
 
         // print the method that called this method
-        System.out.println("addNumberToBannedList was called from: " + Thread.currentThread().getStackTrace()[2].getMethodName());
+    //    System.out.println("addNumberToBannedList was called from: " + Thread.currentThread().getStackTrace()[2].getMethodName());
         for (List<Integer> bannedList : bannedNumbers) {
 
             if (!bannedList.contains(num)) {
@@ -260,9 +265,10 @@ public class CodeCracker implements Cloneable, Serializable {
      *
      */
     private void SolveCombinationsCracked() {
-
         int NumOfNumbersNotNull = 0;
-        int numOfCorrectNumbersInClue;
+        int numOfCorrectNumbersInClueAndCorrectlyPlaced = 0;
+        int numOfCorrectNumbersInClueAndIncorrectlyPlaced = 0;
+
         // NumbersNotNullAndIndexes
         ArrayList<DigitAndIndex> NumbersNotNullAndIndexes;
 
@@ -270,7 +276,16 @@ public class CodeCracker implements Cloneable, Serializable {
         for (int j = 0; j < clues.size(); j++) {
             Clue clue = clues.get(j);
             NumOfNumbersNotNull = 0;
-            numOfCorrectNumbersInClue = clue.getHint().getCorrectCount();
+            numOfCorrectNumbersInClueAndCorrectlyPlaced = clue.getHint().   getCountCorrectNumbersAndCorrectPlacement();
+            numOfCorrectNumbersInClueAndIncorrectlyPlaced = clue.getHint().getCountCorrectNumbersAndIncorrectPlacement();
+            int numOfCorrectNumbersInClue = clue.getHint().getCorrectCount();
+
+            if(numOfCorrectNumbersInClue != (numOfCorrectNumbersInClueAndCorrectlyPlaced+numOfCorrectNumbersInClueAndIncorrectlyPlaced))
+            {
+                throw new RuntimeException("the number of correct numbers in the clue is not equal to the number of correct numbers and correct placement and the number of correct numbers and incorrect placement");
+            }
+
+            
             NumbersNotNullAndIndexes = new ArrayList<>();
 
             Integer[] combinationDigits = clue.getCombination();
@@ -289,7 +304,7 @@ public class CodeCracker implements Cloneable, Serializable {
             }
 
             if (NumOfNumbersNotNull == numOfCorrectNumbersInClue && clue.getHint().isCorrectlyPlaced()) {
-                System.out.println("Clue is solved" + clue);
+                
                 // loop through the NumbersNotNullAndIndexes and add the numbers to the code
                 for (DigitAndIndex digitAndIndex : NumbersNotNullAndIndexes) {
                     code[digitAndIndex.getIndex()] = digitAndIndex.getDigit();
@@ -304,14 +319,31 @@ public class CodeCracker implements Cloneable, Serializable {
                         CorrectNumbersButWrongPlace.add(digitAndIndex.getDigit());
                     }
                 }
-
-            } else {
-                System.out.println("Clue is not solved" + clue);
-                System.out.println("NumOfNumbersNotNull: " + NumOfNumbersNotNull);
-                System.out.println("numOfCorrectNumbersInClue: " + numOfCorrectNumbersInClue);
-                System.out.println("clue.getHint().isCorrectlyPlaced(): " + clue.getHint().isCorrectlyPlaced());
-
+                
+                System.out.println("CorrectNumbersButWrongPlace:");
+                for(Integer digit: CorrectNumbersButWrongPlace){
+                    System.out.println(digit);
+                    
+                }
+                indexesOfSolvedHintsThatNeedsToBeRemoved.add(j);
             }
+
+            else if( NumOfNumbersNotNull == numOfCorrectNumbersInClue && clue.getHint().getCountCorrectNumbersAndCorrectPlacement() >= 1 && clue.getHint().getCountCorrectNumbersAndIncorrectPlacement() >= 1){
+
+// add the numbers from to the Correct Numbers But Wrong Place NumbersNotNullAndIndexes
+                for (DigitAndIndex digitAndIndex : NumbersNotNullAndIndexes) {
+                    if (!CorrectNumbersButWrongPlace.contains(digitAndIndex.getDigit())) {
+                        CorrectNumbersButWrongPlace.add(digitAndIndex.getDigit());
+                    }
+                }
+            
+                
+
+            
+
+          
+
+            } 
 
             // remove the solved clues from the clues list
             // make sure that the indexes are removed from the end to the start in order to not mess up the indexes mkae that the indexes are sorted
@@ -322,6 +354,8 @@ public class CodeCracker implements Cloneable, Serializable {
             }
 
         }
+
+                        
 
     }
 
@@ -348,7 +382,7 @@ public class CodeCracker implements Cloneable, Serializable {
                             if(isCluePlacedCorrectly(clue2)){
                                 Integer[] combinationDigits2 = clue2.getCombination();
                                 if(i != j && combinationDigits2[i] == digit){
-                                    addNumberToBannedListAtSpecificIndex(digit, i);
+                                    addNumberToBannedList(digit);
                                 }
                             }
                         }
@@ -357,6 +391,9 @@ public class CodeCracker implements Cloneable, Serializable {
                 }
             }
         }
+
+                loopThroughAllCombinationsAndRemovedBannedNumbers();
+
         
     }
 
@@ -372,8 +409,9 @@ public class CodeCracker implements Cloneable, Serializable {
      * number with a null
      */
     private void loopThroughAllCombinationsAndRemovedBannedNumbers() {
+        
         // print what method called this method(loopThroughAllCombinationsAndRemovedBannedNumbers)
-        System.out.println("the method which called loopThroughAllCombinationsAndRemovedBannedNumbers: " + Thread.currentThread().getStackTrace()[2].getMethodName());
+     //   System.out.println("the method which called loopThroughAllCombinationsAndRemovedBannedNumbers: " + Thread.currentThread().getStackTrace()[2].getMethodName());
 
         for (Clue clue : clues) {
             Integer[] combinationDigits = clue.getCombination();
@@ -391,6 +429,9 @@ public class CodeCracker implements Cloneable, Serializable {
             }
         }
 
+                SolveCombinationsCracked();
+
+
     }
 
     /**
@@ -398,6 +439,8 @@ public class CodeCracker implements Cloneable, Serializable {
      * banned numbers and the numbers that are already discovered.
      */
     private ArrayList<Integer[]> getAllPossibleCombinations() {
+        SolveCombinationsCracked();
+
         ArrayList<Integer[]> combinations = new ArrayList<>();
         generateCombinations(combinations, new Integer[codeLength], 0);
 
@@ -412,7 +455,7 @@ public class CodeCracker implements Cloneable, Serializable {
             }
         }
 
-        // make sure that the combinations are valid by checking if the combination contains any banned numbers at any index
+        
         return combinations;
     }
 
