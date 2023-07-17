@@ -6,12 +6,16 @@ package com.example.crackthecode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 /**
  *
  * @author Danielnaor
  */
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.swing.plaf.synth.SynthStyle;
 
@@ -20,113 +24,141 @@ public class CodeValidator {
     private List<Clue> clues;
     private Integer[] codeSolvedSoFar;
     ArrayList<Integer[]> allPosibleArrayList;
+    
+   
 
     public CodeValidator(List<Clue> clues, Integer[] code, ArrayList<Integer[]> allPosibleArrayList) {
         this.clues = clues;
         if (code != null) {
             this.codeSolvedSoFar = code;
 
-        }
-        else{ 
+        } else {
             this.codeSolvedSoFar = new Integer[clues.get(0).getCombination().length];
         }
         this.allPosibleArrayList = allPosibleArrayList;
 
-        // print the clues
-        /*System.out.println("Clues: ");
-        for (Clue clue : clues) {
-            System.out.println(clue);
-        }
-*/
-        // print the code
-        System.out.println("Code valid: " + Arrays.toString(codeSolvedSoFar));
-
-        // print the possible codes
-        System.out.println("All possible: ");
-        
-       
-
     }
 
-    public static CodeResult getCodeResult(Integer[] possibleCode, Integer[] originalCombination) {
-        
+    public static boolean validateCode(Integer[] code, List<Clue> clues) {
+        for (Clue clue : clues) {
+            Hint hint = clue.getHint();
+            Integer[] combination = clue.getCombination();
+
+            if (!isHintMatched(hint, code, combination)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static CodeResult getCodeResult(Integer[] possibleCode, Integer[] CombinationFromClue) {
+
         int countCorrectNumbers = 0;
         int countCorrectNumbersAndCorrectPlacement = 0;
         int countCorrectNumbersAndIncorrectPlacement = 0;
 
+        // Track the numbers from possibleCode that have already been matched
+        Set<Integer> matchedNumbers = new HashSet<>();
+
         for (int i = 0; i < possibleCode.length; i++) {
-            for (int j = 0; j < originalCombination.length; j++) {
-                if (possibleCode[i] == originalCombination[j]) {
-                    countCorrectNumbers++;
+            for (int j = 0; j < CombinationFromClue.length; j++) {
+                if (possibleCode[i] == CombinationFromClue[j]) {
+                    if (!matchedNumbers.contains(possibleCode[i])) {
+                        countCorrectNumbers++;
+                        matchedNumbers.add(possibleCode[i]);
+                    }
                     if (i == j) {
                         countCorrectNumbersAndCorrectPlacement++;
                     } else {
                         countCorrectNumbersAndIncorrectPlacement++;
                     }
-                   // originalCombination[j] = -1; // Mark the digit as used to avoid counting it again
-                    break; // Move to the next digit in the possibleCode array
                 }
-
             }
-
         }
+
         return new CodeResult(countCorrectNumbers, countCorrectNumbersAndCorrectPlacement, countCorrectNumbersAndIncorrectPlacement);
     }
 
     // a method that will loop trought each hint and compare it to the possible code if the possible code matches the hint and if it does not match the hint it will remove it from the possible code\
     // (matching the hint with the possible code meants that the number of correct numbers and correct placement and the number of correct numbers and incorrect placement are the same as the hint)
-    
-    public void validateHints() {
-         Integer[] combinationT = new Integer[]{3,8,4,1};
+    //  Integer[] combinationT = new Integer[]{3,8,4,1};
+    public void validateAllPossibleSolutionsWithHints() {
+System.out.println("validateAllPossibleSolutionsWithHints: " );
 
-        allPosibleArrayList.add(combinationT);
+        HashMap<Integer, Integer[]> allPossibleSolutionsHashMap = convertArrayListToHashMap(allPosibleArrayList);
 
-        System.out.println("validateHints: ");
         for (Clue clue : clues) {
             Hint hint = clue.getHint();
             Integer[] combination = clue.getCombination();
-           /*  
-            System.out.println("hint: " + hint);
-            System.out.println("combination: " + Arrays.toString(combination));
-            System.out.println("combinationT: " + Arrays.toString(combinationT));
-            System.out.println("matched: " + isHintMatched(hint, combination, combinationT));
-            */
-            if(!isHintMatched(hint, combination, combinationT)){
-                System.out.println("no Solution");
-                return;
 
-            }   
+            Iterator<Map.Entry<Integer, Integer[]>> iterator = allPossibleSolutionsHashMap.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<Integer, Integer[]> entry = iterator.next();
+                Integer[] possibleCode = entry.getValue();
 
+                if (!isHintMatched(hint, possibleCode, combination)) {
+                    iterator.remove(); // Remove the entry from the hashmap
+                }
+            }
         }
 
-        System.out.println("Solution: " + Arrays.toString(combinationT));
+        for (Integer key : allPossibleSolutionsHashMap.keySet()) {
+            // final validation that the entry from allPossibleSolutionsHashMap matches with all the clues 
+            for (Clue clue : clues) {
+                Hint hint = clue.getHint();
+                Integer[] combination = clue.getCombination();
+                Integer[] possibleCode = allPossibleSolutionsHashMap.get(key);
+                if (!isHintMatched(hint, possibleCode, combination)) {
+                    allPossibleSolutionsHashMap.remove(key);
+                    break;
+               } else if (isHintMatched(hint, possibleCode, combination)) {
 
+                    continue;
+                }
 
-
-
-
-
-
-       /*  System.out.println("Possible Codes: ");
-        for (Integer[] possibleCode : allPosibleArrayList) {
-            System.out.println(Arrays.toString(possibleCode));
+            }
+            
         }
+        
+        if(allPossibleSolutionsHashMap.size() == 1){
+            // get the only key from the hashmap
+            //Set<Integer> keySet = allPossibleSolutionsHashMap.keySet();
 
-        */
+            // Converting key set to an array
+            //Integer[] keysArray = keySet.toArray(new Integer[keySet.size()]);
+            
+            //Integer key = keysArray[0];
+
+
+            Integer key =  allPossibleSolutionsHashMap.keySet().toArray(new Integer[1])[0];
 
 
 
+            System.out.println("The code is: " + Arrays.toString(allPossibleSolutionsHashMap.get(key)));
+
+        }
+        else{
+            System.out.println("There are multiple codes to solve this and they are: ");
+            for (Integer key : allPossibleSolutionsHashMap.keySet()) {
+                Integer[] possibleCode = allPossibleSolutionsHashMap.get(key);
+                System.out.println(possibleCode);
+            }
+         
+            
+                    
+
+        }
 
     }
-    
-    private boolean isHintMatched(Hint hint, Integer[] possibleCode, Integer[] combination) {
+
+    private static boolean isHintMatched(Hint hint, Integer[] possibleCode, Integer[] combination) {
         // Compare the hint with the possible code and combination
         // Return true if the hint matches the possible code and combination, false otherwise
         // Implement the comparison logic based on the requirements of your game
         // For example:
         // return hint.getCorrectCount() == calculateCorrectCount(possibleCode, combination)
         //        && hint.isCorrectlyPlaced() == isCorrectlyPlaced(possibleCode, combination);
-        
+
         CodeResult codeResult = getCodeResult(possibleCode, combination);
 
         int countCorrectNumbers = codeResult.getCountCorrectNumbers();
@@ -138,16 +170,10 @@ public class CodeValidator {
         int countCorrectNumbersAndIncorrectPlacement = codeResult.getCountCorrectNumbersAndIncorrectPlacement();
         int countCorrectNumbersAndIncorrectPlacementHint = hint.getCountCorrectNumbersAndIncorrectPlacement();
 
-
-        
-
         return countCorrectNumbers == countCorrectNumbersHint
                 && countCorrectNumbersAndCorrectPlacement == countCorrectNumbersAndCorrectPlacementHint
                 && countCorrectNumbersAndIncorrectPlacement == countCorrectNumbersAndIncorrectPlacementHint;
     }
-    
-
-    
 
     // now we will just make the final elimation by checking which possible code matches with all of the digits of Code (instance variable) that are not null
     public void filterPossibleCodes() {
@@ -170,5 +196,19 @@ public class CodeValidator {
             }
         }
 
+    }
+
+    private static HashMap<Integer, Integer[]> convertArrayListToHashMap(ArrayList<Integer[]> arrayList) {
+
+        HashMap<Integer, Integer[]> hashMap = new HashMap<>();
+
+        int key = 0;
+        for (Integer[] item : arrayList) {
+
+            hashMap.put(key, item);
+            key++;
+        }
+
+        return hashMap;
     }
 }

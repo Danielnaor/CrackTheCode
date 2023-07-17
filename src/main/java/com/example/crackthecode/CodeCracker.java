@@ -15,6 +15,8 @@ import java.util.*;
 
 public class CodeCracker implements Cloneable, Serializable {
 
+    private boolean foundCode = false;
+
     private int codeLength;
     private List<Clue> clues;
     private List<Integer>[] bannedNumbers;
@@ -66,8 +68,6 @@ public class CodeCracker implements Cloneable, Serializable {
 
         // first step to solve it will be to Check if there is a clue hint where none of the numbers are correct.
         // if so              // add it that clue's combinations into the banned list of all indexes and then delete that clue
-        
-
         System.out.println("\n");
         if (checkNothingCorrect()) {
             System.out.println("there is a statemnt where NothingCorrect");
@@ -119,13 +119,9 @@ public class CodeCracker implements Cloneable, Serializable {
         SolveCombinationsCracked();
 
         if (checkIfCodeWasFound()) {
-            return code;
-        }
 
-        // check if some of them are solved 
-        if (checkIfCodeWasFound()) {
             return code;
-        } else {
+        }  else {
             System.out.println("Unsolved clues: ");
             for (Clue clue : clues) {
                 System.out.println(clue);
@@ -153,6 +149,7 @@ public class CodeCracker implements Cloneable, Serializable {
 
             if (allPosibleArrayList.size() == 1) {
                 code = allPosibleArrayList.get(0);
+                foundCode = true;
                 return code;
 
             } else {
@@ -336,7 +333,31 @@ public class CodeCracker implements Cloneable, Serializable {
     private void loopThroughAllCluesAndAddNumbersToBannedListIfNotCorrectlyPlaced() {
         // if the say that the numbers are not correctly placed, move through the combination and for each digit add it to the banned list of that index
         // loop through all clues
-        /// cal isCluePlacedCorrectly and if false start comparing to the other combinations. 
+        /// call isCluePlacedCorrectly and if false start comparing to the other combinations. 
+        for(Clue clue: clues){
+        
+            if(!isCluePlacedCorrectly(clue)){
+                // loop trought all indexes
+                Integer[] combinationDigits = clue.getCombination();
+                for (int i = 0; i < combinationDigits.length; i++) {
+                    Integer digit = combinationDigits[i];
+                    // if the digit is not null, check if at any other clues the digit at that index is the same and is correctly placed, if so add it to the banned list of that index
+                    if (digit != null) {
+                        for(int j = 0; j < clues.size(); j++){
+                            Clue clue2 = clues.get(j);
+                            if(isCluePlacedCorrectly(clue2)){
+                                Integer[] combinationDigits2 = clue2.getCombination();
+                                if(i != j && combinationDigits2[i] == digit){
+                                    addNumberToBannedListAtSpecificIndex(digit, i);
+                                }
+                            }
+                        }
+                       
+                    }
+                }
+            }
+        }
+        
     }
 
     public boolean isCluePlacedCorrectly(Clue clue) {
@@ -363,7 +384,7 @@ public class CodeCracker implements Cloneable, Serializable {
                 if (digit != null) {
                     if (bannedNumbers[i].contains(digit)) {
                         // print the current combination
-                        
+
                         combinationDigits[i] = null;
                     }
                 }
@@ -416,12 +437,15 @@ public class CodeCracker implements Cloneable, Serializable {
     }
 
     private boolean checkIfCodeWasFound() {
+
         for (int i = 0; i < codeLength; i++) {
             if (code[i] == -1) {
                 return false;
 
             }
         }
+        foundCode = true;
+
         return true;
     }
 
@@ -439,6 +463,14 @@ public class CodeCracker implements Cloneable, Serializable {
             }
         }
         return true;
+    }
+
+    public boolean isFoundCode() {
+        return foundCode;
+    }
+
+    public void setFoundCode(boolean foundCode) {
+        this.foundCode = foundCode;
     }
 
 }

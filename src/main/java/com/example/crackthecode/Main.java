@@ -15,14 +15,10 @@ import static java.util.Collections.shuffle;
  *
  * @author Danielnaor
  */
-public class Main implements Cloneable, Serializable{
-    
+public class Main implements Cloneable, Serializable {
+
     public static void main(String[] args) {
-        
-        
-        
-        
-        
+
         ArrayList<Clue> clues = new ArrayList<>();
         ArrayList<Clue> deepCopyOfClues = new ArrayList<>();
 
@@ -38,39 +34,31 @@ public class Main implements Cloneable, Serializable{
             deepCopyOfClues.add(shallowCopy);
         }
 
-        
-        
-    
-        
-        
-    
-
         CodeCracker codeCracker = new CodeCracker(deepCopyOfClues);
 
         Integer[] code = codeCracker.crackCode();
+        boolean foundCode = codeCracker.isFoundCode();
 
-        System.out.println("The code is: " + Arrays.toString(code));
 
-        // print the original clues
-        out.println("og:\n");
-        clues.forEach(e -> System.out.println(e));
+        if (!foundCode) {
+// make sure the code is correct by checking it with the clues and the codevalidator
+            CodeValidator codeValidator = new CodeValidator(clues, code, codeCracker.getAllPosibleArrayList());
+            codeValidator.validateAllPossibleSolutionsWithHints();
+            
+            
+        } else {
+            
+            // validate that the code found is correct
+            boolean codeIsCorrect = CodeValidator.validateCode(code, clues);
+            
+            if(codeIsCorrect){
+                System.out.println("The code is: " + Arrays.toString(code));
 
-        System.out.println("end OG");
-
-        // make sure the code is correct by checking it with the clues and the codevalidator
-        CodeValidator codeValidator = new CodeValidator(clues, code, codeCracker.getAllPosibleArrayList());
-        codeValidator.validateHints();
-        
+            }
+        }
 
     }
- 
-    
-    
 
-    
-    
-    
-    
 }
 /*clues.add(new Clue(new Integer[]{3, 6, 8}, new Hint("One number is correct and correctly placed", 1, true)));
         clues.add(new Clue(new Integer[]{3, 8, 7}, new Hint("Nothing is correct", 0, false)));
@@ -83,3 +71,4 @@ public class Main implements Cloneable, Serializable{
 // 5, 2, 0, 1 one number is correct and well placed
 // 6, 5, 0, 7 nothing is correct
 // 8, 5, 2, 4 two numbers are correct but wrong placed
+// solution: 3, 8 , 4 , 1
