@@ -64,7 +64,7 @@ public class CodeCracker implements Cloneable, Serializable {
 
         // first step to solve it will be to Check if there is a clue hint where none of the numbers are correct.
         // if so              // add it that clue's combinations into the banned list of all indexes and then delete that clue
-        if (checkNothingCorrect()) {
+        while (checkNothingCorrect()) {
             // add it that clue's combinations into the banned list of all indexes, then loop through all clues and remove numbers from the banned list
             Integer[] combinationDigits = clues.get(ClueNothingCorrectIndex).getCombination();
             for (int i = 0; i < combinationDigits.length; i++) {
@@ -139,7 +139,18 @@ public class CodeCracker implements Cloneable, Serializable {
 
             } 
             
+            System.out.println("part code: " + Arrays.toString(code));
 
+            System.out.println("remaining clues: ");
+            for (Clue clue : clues) {
+                System.out.println((clue));
+            }
+
+            // print all the CorrectNumbersButWrongPlace
+            System.out.println("CorrectNumbersButWrongPlace: " + CorrectNumbersButWrongPlace);
+            
+            
+            
             
             return null;
 
@@ -234,6 +245,8 @@ public class CodeCracker implements Cloneable, Serializable {
      *
      */
     private void SolveCombinationsCracked() {
+
+
         int NumOfNumbersNotNull = 0;
         int numOfCorrectNumbersInClueAndCorrectlyPlaced = 0;
         int numOfCorrectNumbersInClueAndIncorrectlyPlaced = 0;
@@ -302,11 +315,7 @@ public class CodeCracker implements Cloneable, Serializable {
                     }
                 }
             
-                
 
-            
-
-          
 
             } 
 
@@ -319,6 +328,8 @@ public class CodeCracker implements Cloneable, Serializable {
             }
 
         }
+
+        
 
                         
 
@@ -359,8 +370,16 @@ public class CodeCracker implements Cloneable, Serializable {
 
                 loopThroughAllCombinationsAndRemovedBannedNumbers();
 
+
         
     }
+
+  
+
+
+
+
+
 
     public boolean isCluePlacedCorrectly(Clue clue) {
         return clue.getHint().isCorrectlyPlaced();
@@ -472,6 +491,8 @@ public class CodeCracker implements Cloneable, Serializable {
         }
         return true;
     }
+
+
 
     public boolean isFoundCode() {
         return foundCode;

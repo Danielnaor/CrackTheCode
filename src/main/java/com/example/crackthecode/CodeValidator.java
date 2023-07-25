@@ -4,6 +4,7 @@
  */
 package com.example.crackthecode;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,15 +18,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.plaf.synth.SynthStyle;
-
 public class CodeValidator {
 
     private List<Clue> clues;
     private Integer[] codeSolvedSoFar;
     ArrayList<Integer[]> allPosibleArrayList;
-    
-   
+    private Integer[] finalCode;
 
     public CodeValidator(List<Clue> clues, Integer[] code, ArrayList<Integer[]> allPosibleArrayList) {
         this.clues = clues;
@@ -44,14 +42,37 @@ public class CodeValidator {
             Hint hint = clue.getHint();
             Integer[] combination = clue.getCombination();
 
-            if (!isHintMatched(hint, code, combination)) {
+            boolean codeHasADuplicate = HasADuplicate(code);
+
+            // if there is a dupe in code and also combo doesnt equal  1,4,7,7
+
+            // print the combination and say combinationvalidateCode:
+            if (codeHasADuplicate) {
+                if (!isHintMatchedDupe(hint, code, combination)) {
+
+                    return false;
+                }
+
+            } else if (!isHintMatched(hint, code, combination)) {
                 return false;
             }
         }
         return true;
     }
 
-    public static CodeResult getCodeResult(Integer[] possibleCode, Integer[] CombinationFromClue) {
+    private static boolean HasADuplicate(Integer[] code) {
+
+        Set<Integer> set = new HashSet<Integer>();
+        for (Integer i : code) {
+            if (set.contains(i)) {
+                return true;
+            }
+            set.add(i);
+        }
+        return false;
+    }
+
+    public static CountsStat getCodeResult(Integer[] possibleCode, Integer[] CombinationFromClue) {
 
         int countCorrectNumbers = 0;
         int countCorrectNumbersAndCorrectPlacement = 0;
@@ -76,7 +97,7 @@ public class CodeValidator {
             }
         }
 
-        return new CodeResult(countCorrectNumbers, countCorrectNumbersAndCorrectPlacement, countCorrectNumbersAndIncorrectPlacement);
+        return new CountsStat(countCorrectNumbers, countCorrectNumbersAndCorrectPlacement, countCorrectNumbersAndIncorrectPlacement);
     }
 
     // a method that will loop trought each hint and compare it to the possible code if the possible code matches the hint and if it does not match the hint it will remove it from the possible code\
@@ -86,6 +107,10 @@ public class CodeValidator {
 
         HashMap<Integer, Integer[]> allPossibleSolutionsHashMap = convertArrayListToHashMap(allPosibleArrayList);
 
+            
+                
+                
+            
         for (Clue clue : clues) {
             Hint hint = clue.getHint();
             Integer[] combination = clue.getCombination();
@@ -94,10 +119,15 @@ public class CodeValidator {
             while (iterator.hasNext()) {
                 Map.Entry<Integer, Integer[]> entry = iterator.next();
                 Integer[] possibleCode = entry.getValue();
-
-                if (!isHintMatched(hint, possibleCode, combination)) {
+                
+                if (HasADuplicate(possibleCode)) {
+                    if (!isHintMatchedDupe(hint, possibleCode, combination)) {
+                        iterator.remove(); // Remove the entry from the hashmap
+                    }
+                } else if (!isHintMatched(hint, possibleCode, combination)) {
                     iterator.remove(); // Remove the entry from the hashmap
                 }
+
             }
         }
 
@@ -107,44 +137,52 @@ public class CodeValidator {
                 Hint hint = clue.getHint();
                 Integer[] combination = clue.getCombination();
                 Integer[] possibleCode = allPossibleSolutionsHashMap.get(key);
-                if (!isHintMatched(hint, possibleCode, combination)) {
+
+                /*if (!isHintMatched(hint, possibleCode, combination)) {
                     allPossibleSolutionsHashMap.remove(key);
                     break;
                } else if (isHintMatched(hint, possibleCode, combination)) {
 
                     continue;
                 }
+                 */
+                if (HasADuplicate(possibleCode)) {
+                    if (!isHintMatchedDupe(hint, possibleCode, combination)) {
+                        allPossibleSolutionsHashMap.remove(key);
+                        break;
+                    }
+                } else if (!isHintMatched(hint, possibleCode, combination)) {
+                    allPossibleSolutionsHashMap.remove(key);
+                    break;
+                } else if (isHintMatched(hint, possibleCode, combination)) {
+
+                    continue;
+                }
 
             }
-            
+
         }
-        
-        if(allPossibleSolutionsHashMap.size() == 1){
+
+        if (allPossibleSolutionsHashMap.size() == 1) {
             // get the only key from the hashmap
             //Set<Integer> keySet = allPossibleSolutionsHashMap.keySet();
 
             // Converting key set to an array
             //Integer[] keysArray = keySet.toArray(new Integer[keySet.size()]);
-            
             //Integer key = keysArray[0];
-
-
-            Integer key =  allPossibleSolutionsHashMap.keySet().toArray(new Integer[1])[0];
-
-
+            Integer key = allPossibleSolutionsHashMap.keySet().toArray(new Integer[1])[0];
 
             System.out.println("The code is: " + Arrays.toString(allPossibleSolutionsHashMap.get(key)));
+            finalCode = allPossibleSolutionsHashMap.get(key);
 
-        }
-        else{
+        } else {
             System.out.println("There are multiple codes to solve this and they are: ");
             for (Integer key : allPossibleSolutionsHashMap.keySet()) {
                 Integer[] possibleCode = allPossibleSolutionsHashMap.get(key);
                 System.out.println(possibleCode);
             }
-         
-            
-                    
+
+            finalCode = null;
 
         }
 
@@ -157,8 +195,13 @@ public class CodeValidator {
         // For example:
         // return hint.getCorrectCount() == calculateCorrectCount(possibleCode, combination)
         //        && hint.isCorrectlyPlaced() == isCorrectlyPlaced(possibleCode, combination);
-
-        CodeResult codeResult = getCodeResult(possibleCode, combination);
+        
+        
+        
+        
+        
+        
+        CountsStat codeResult = getCodeResult(possibleCode, combination);
 
         int countCorrectNumbers = codeResult.getCountCorrectNumbers();
         int countCorrectNumbersHint = hint.getCorrectCount();
@@ -209,5 +252,155 @@ public class CodeValidator {
         }
 
         return hashMap;
+    }
+
+    private static boolean isHintMatchedDupe(Hint hint, Integer[] possibleCode, Integer[] combination) {
+        // print the possible code and the combination
+
+        int countCorrectNumbersHint = hint.getCorrectCount();
+        int countCorrectNumbersAndCorrectPlacementHint = hint.getCountCorrectNumbersAndCorrectPlacement();
+        int countCorrectNumbersAndIncorrectPlacementHint = hint.getCountCorrectNumbersAndIncorrectPlacement();
+
+        ArrayList<Integer> dupesInPossibleCode = findDupes(possibleCode);
+
+        // now check if any of the dupe numbers in the possible code are even in the combination
+        for (int i = 0; i < dupesInPossibleCode.size(); i++) {
+            boolean DupeNumersInCombination = false;
+
+            int currentDupe = dupesInPossibleCode.get(i);
+            for (int j = 0; j < combination.length; j++) {
+                if (currentDupe == combination[j]) {
+                    DupeNumersInCombination = true;
+                }
+            }
+
+            if (!DupeNumersInCombination) {
+                dupesInPossibleCode.remove(i);
+                i--;
+            }
+        }
+
+        HashMap<Integer, DupeNumbers> dupeNumbers = new HashMap<>();
+        
+        
+
+        // loop through the dupes in the possible code and count the number of times each dupe appears in the possible code and if the dupe is correctly placed with the combination
+        for (int i = 0; i < dupesInPossibleCode.size(); i++) {
+            int count = 0; // Initialize count for each number - this is the count of the number of times the dupe appears in the possible code
+            boolean CorrectlyPlaced = false; // Initialize CorrectlyPlaced for each number
+            int currentDupe = dupesInPossibleCode.get(i);
+            // index of the current dupe in the possible code
+            int indexOfCurrentDupe = 0;
+            for (int j = 0; j < possibleCode.length; j++) {
+                if (currentDupe == possibleCode[j]) {
+                    indexOfCurrentDupe = j;
+
+                }
+            }
+
+            for (int j = 0; j < possibleCode.length; j++) {
+                if (dupesInPossibleCode.get(i) == possibleCode[j]) {
+                    count++;
+                    if (combination[j] == dupesInPossibleCode.get(i) && j == indexOfCurrentDupe) {
+
+                        CorrectlyPlaced = true;
+                    }
+                }
+
+            }
+
+            int countTimesDupeInCombination = 0;
+            for (int j = 0; j < combination.length; j++) {
+                if (dupesInPossibleCode.get(i) == combination[j]) {
+                    countTimesDupeInCombination++;
+                }
+            }
+
+            if (dupeNumbers.containsKey(dupesInPossibleCode.get(i))) {
+                DupeNumbers dupeAlreadyInHashMap = dupeNumbers.get(dupesInPossibleCode.get(i));
+                if (dupeAlreadyInHashMap.isCorrectlyPlaced()) {
+                    CorrectlyPlaced = true;
+                }
+
+                if (count != dupeAlreadyInHashMap.getCount()) {
+                    System.out.println("count is not working correctly: " + count);
+                }
+
+                dupeAlreadyInHashMap.setCount(count);
+                dupeAlreadyInHashMap.setCorrectlyPlaced(CorrectlyPlaced);
+
+            } else {
+                dupeNumbers.put(dupesInPossibleCode.get(i), new DupeNumbers(dupesInPossibleCode.get(i), count, CorrectlyPlaced));
+            }
+        }
+
+        int countCorrectNumbers = 0;
+        int countCorrectNumbersAndCorrectPlacement = 0;
+        int countCorrectNumbersAndIncorrectPlacement = 0;
+
+        // count the number of correct numbers and correct placement and the number of correct numbers and incorrect placement in the possible code
+        for (int i = 0; i < possibleCode.length; i++) {
+            for (int j = 0; j < combination.length; j++) {
+                if (possibleCode[i] == combination[j]) {
+                    countCorrectNumbers++;
+
+                    if (i == j) {
+                        countCorrectNumbersAndCorrectPlacement++;
+                    } else {
+                        countCorrectNumbersAndIncorrectPlacement++;
+                    }
+
+                }
+            }
+        }
+
+        for (int i = 0; i < dupesInPossibleCode.size(); i++) {
+            int currentDupe = dupesInPossibleCode.get(i);
+
+            DupeNumbers dupeNumber = dupeNumbers.get(currentDupe);
+
+            countCorrectNumbersAndIncorrectPlacement -= dupeNumber.getCount() - 1;
+            countCorrectNumbers -= dupeNumber.getCount() - 1;
+
+        }
+
+        System.out.println("possibleCode: " + Arrays.toString(possibleCode) + " " + countCorrectNumbers + " " + countCorrectNumbersAndCorrectPlacement + " " + countCorrectNumbersAndIncorrectPlacement);
+
+        System.out.println("combination: " + Arrays.toString(combination) + " " + countCorrectNumbersHint + " " + countCorrectNumbersAndCorrectPlacementHint + " " + countCorrectNumbersAndIncorrectPlacementHint);
+        System.out.println(countCorrectNumbersHint == countCorrectNumbers
+                && countCorrectNumbersAndCorrectPlacementHint == countCorrectNumbersAndCorrectPlacement
+                && countCorrectNumbersAndIncorrectPlacementHint == countCorrectNumbersAndIncorrectPlacement);
+
+        System.out.println("");
+
+        return countCorrectNumbersHint == countCorrectNumbers
+                && countCorrectNumbersAndCorrectPlacementHint == countCorrectNumbersAndCorrectPlacement
+                && countCorrectNumbersAndIncorrectPlacementHint == countCorrectNumbersAndIncorrectPlacement;
+    }
+
+    private static ArrayList<Integer> findDupes(Integer[] possibleCode) {
+        ArrayList<Integer> numbersUsed = new ArrayList<>();
+        ArrayList<Integer> dupes = new ArrayList<>();
+        // loop through the possible code
+        for (int i = 0; i < possibleCode.length; i++) {
+            // if the number is not in the numbersUsed array list add it to the numbersUsed array list
+            if (!numbersUsed.contains(possibleCode[i])) {
+                numbersUsed.add(possibleCode[i]);
+            } // if the number is in the numbersUsed array list add it to the dupes array list
+            else {
+                if (!dupes.contains(possibleCode[i])) {
+                    dupes.add(possibleCode[i]);
+                }
+
+            }
+
+        }
+        // return the dupes array list
+        return dupes;
+    }
+
+    // getter for finalCode
+    public Integer[] getFinalCode() {
+        return finalCode;
     }
 }

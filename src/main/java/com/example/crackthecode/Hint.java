@@ -34,7 +34,7 @@ public class Hint implements Cloneable, Serializable {
         this.countCorrectNumbersAndCorrectPlacement = countCorrectNumbersAndCorrectPlacement;
         this.countCorrectNumbersAndIncorrectPlacement = countCorrectNumbersAndIncorrectPlacement;
         this.correctlyPlaced = correctlyPlaced;
-        if(correctCount == countCorrectNumbersAndCorrectPlacement){
+        if(correctCount == countCorrectNumbersAndCorrectPlacement && countCorrectNumbersAndIncorrectPlacement == 0 && countCorrectNumbersAndCorrectPlacement > 0){
             this.correctlyPlaced = true;
         } else {
             this.correctlyPlaced = false;
