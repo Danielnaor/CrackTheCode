@@ -106,8 +106,14 @@ public class CodeValidator {
     public void validateAllPossibleSolutionsWithHints() {
 
         HashMap<Integer, Integer[]> allPossibleSolutionsHashMap = convertArrayListToHashMap(allPosibleArrayList);
+        // print all allPossibleSolutionsHashMap
+       /* for (Integer key : allPossibleSolutionsHashMap.keySet()) {
+            Integer[] possibleCode = allPossibleSolutionsHashMap.get(key);
+            System.out.println("possibleCode: " + Arrays.toString(possibleCode));
+        }*/
+       allPossibleSolutionsHashMap.remove(1);
+              allPossibleSolutionsHashMap.remove(2);
 
-            
                 
                 
             
@@ -130,6 +136,8 @@ public class CodeValidator {
 
             }
         }
+        
+        
 
         for (Integer key : allPossibleSolutionsHashMap.keySet()) {
             // final validation that the entry from allPossibleSolutionsHashMap matches with all the clues 
@@ -281,14 +289,21 @@ public class CodeValidator {
         }
 
         HashMap<Integer, DupeNumbers> dupeNumbers = new HashMap<>();
+        // stores the times the dupe is placed correct and the times it isents placed correct
+        
         
         
 
         // loop through the dupes in the possible code and count the number of times each dupe appears in the possible code and if the dupe is correctly placed with the combination
         for (int i = 0; i < dupesInPossibleCode.size(); i++) {
-            int count = 0; // Initialize count for each number - this is the count of the number of times the dupe appears in the possible code
+            int countAppearencesCode = 0; // Initialize count for each number - this is the count of the number of times the dupe appears in the possible code
+            int countAppearencesCombination = 0; // Initialize count for each number - this is the count of the number of times the dupe appears in the combination
             boolean CorrectlyPlaced = false; // Initialize CorrectlyPlaced for each number
             int currentDupe = dupesInPossibleCode.get(i);
+            ArrayList<Boolean > dupeCorrectlyPlaced = new ArrayList<>();
+
+
+            
             // index of the current dupe in the possible code
             int indexOfCurrentDupe = 0;
             for (int j = 0; j < possibleCode.length; j++) {
@@ -296,18 +311,24 @@ public class CodeValidator {
                     indexOfCurrentDupe = j;
 
                 }
-            }
-
-            for (int j = 0; j < possibleCode.length; j++) {
                 if (dupesInPossibleCode.get(i) == possibleCode[j]) {
-                    count++;
+                    countAppearencesCode++;
                     if (combination[j] == dupesInPossibleCode.get(i) && j == indexOfCurrentDupe) {
-
+                        System.out.println(combination[j] + " " + " j= " + j + " combination: " + Arrays.toString(combination));
+                        
                         CorrectlyPlaced = true;
+
                     }
+                    else 
+                    {
+                        CorrectlyPlaced = false;
+                    }
+
+                    dupeCorrectlyPlaced.add(CorrectlyPlaced);
                 }
 
             }
+            
 
             int countTimesDupeInCombination = 0;
             for (int j = 0; j < combination.length; j++) {
@@ -316,24 +337,34 @@ public class CodeValidator {
                 }
             }
 
+
             if (dupeNumbers.containsKey(dupesInPossibleCode.get(i))) {
                 DupeNumbers dupeAlreadyInHashMap = dupeNumbers.get(dupesInPossibleCode.get(i));
-                if (dupeAlreadyInHashMap.isCorrectlyPlaced()) {
+                if (dupeAlreadyInHashMap.isCorrectlyPlaced(indexOfCurrentDupe)) {
                     CorrectlyPlaced = true;
                 }
 
-                if (count != dupeAlreadyInHashMap.getCount()) {
-                    System.out.println("count is not working correctly: " + count);
+                if (countAppearencesCode != dupeAlreadyInHashMap.getCountAppearencesCode()) {
+                    System.out.println("count is not working correctly: " + countAppearencesCode);
                 }
 
-                dupeAlreadyInHashMap.setCount(count);
-                dupeAlreadyInHashMap.setCorrectlyPlaced(CorrectlyPlaced);
-
+                dupeAlreadyInHashMap.setCountAppearencesCode(countAppearencesCode);
+                dupeAlreadyInHashMap.setCorrectlyPlaced(indexOfCurrentDupe, CorrectlyPlaced);
+                dupeNumbers.put(dupesInPossibleCode.get(i), dupeAlreadyInHashMap);
             } else {
-                dupeNumbers.put(dupesInPossibleCode.get(i), new DupeNumbers(dupesInPossibleCode.get(i), count, CorrectlyPlaced));
-            }
+                dupeNumbers.put(dupesInPossibleCode.get(i), new DupeNumbers(dupesInPossibleCode.get(i), countAppearencesCode,countAppearencesCombination, dupeCorrectlyPlaced));
+        }
         }
 
+
+        // print dupeCorrectlyPlaced
+        // this will stores Digits that Appears an Equal amount of times in the combination and in the code and they appear More Then Ones 
+        ArrayList<Integer> equalOccurrenceDigits = new ArrayList<>();
+
+
+        
+        
+        
         int countCorrectNumbers = 0;
         int countCorrectNumbersAndCorrectPlacement = 0;
         int countCorrectNumbersAndIncorrectPlacement = 0;
@@ -353,16 +384,25 @@ public class CodeValidator {
                 }
             }
         }
+        
+        
+        
+        
+        
+        
 
         for (int i = 0; i < dupesInPossibleCode.size(); i++) {
             int currentDupe = dupesInPossibleCode.get(i);
 
             DupeNumbers dupeNumber = dupeNumbers.get(currentDupe);
 
-            countCorrectNumbersAndIncorrectPlacement -= dupeNumber.getCount() - 1;
-            countCorrectNumbers -= dupeNumber.getCount() - 1;
+            countCorrectNumbersAndIncorrectPlacement -= dupeNumber.getCountAppearencesCode() - 1;
+            countCorrectNumbers -= dupeNumber.getCountAppearencesCode() - 1;
 
         }
+        
+        
+        
 
         System.out.println("possibleCode: " + Arrays.toString(possibleCode) + " " + countCorrectNumbers + " " + countCorrectNumbersAndCorrectPlacement + " " + countCorrectNumbersAndIncorrectPlacement);
 
