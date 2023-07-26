@@ -359,7 +359,7 @@ public class CodeValidator {
                 dupeAlreadyInHashMap.setCorrectlyPlaced(indexOfCurrentDupe, CorrectlyPlaced);
                 dupeNumbers.put(dupesInPossibleCode.get(i), dupeAlreadyInHashMap);
             } else {
-                dupeNumbers.put(dupesInPossibleCode.get(i), new DupeNumbers(dupesInPossibleCode.get(i), countAppearencesCode,countTimesDupeInCombination, dupeCorrectlyPlaced));
+                dupeNumbers.put(dupesInPossibleCode.get(i), new DupeNumbers(dupesInPossibleCode.get(i), countAppearencesCode,countTimesDupeInCombination, dupeCorrectlyPlaced, false));
         }
 
     
@@ -385,6 +385,8 @@ public class CodeValidator {
             System.out.println("dupeNumber: " + dupeNumber.getNum() + " " + dupeNumber.getCountAppearencesCode() + " " + dupeNumber.getCountAppearencesCombination() + " " + dupeNumber.getCorrectlyPlaced());
             if(dupeNumber.getCountAppearencesCode() == dupeNumber.getCountAppearencesCombination() && dupeNumber.getCountAppearencesCode() > 1){
                 equalOccurrenceDigits.add(dupeNumber.getNum());
+                // set the isInEqualAppearences to true
+                dupeNumber.setIsInEqualAppearences(true);
 
                 
             }
@@ -431,13 +433,34 @@ public class CodeValidator {
         
 
         for (int i = 0; i < dupesInPossibleCode.size(); i++) {
+            
             int currentDupe = dupesInPossibleCode.get(i);
 
             DupeNumbers dupeNumber = dupeNumbers.get(currentDupe);
+            // if the dupe is in not in equalOccurrenceDigits array list    
+            if(!dupeNumber.isInEqualAppearences()){
+                 countCorrectNumbersAndIncorrectPlacement -= dupeNumber.getCountAppearencesCode() - 1;
+                countCorrectNumbers -= dupeNumber.getCountAppearencesCode() - 1;
 
-            countCorrectNumbersAndIncorrectPlacement -= dupeNumber.getCountAppearencesCode() - 1;
-            countCorrectNumbers -= dupeNumber.getCountAppearencesCode() - 1;
+            } else{
+                // do a for loop to add to the count then add wheter or not it is correctly placed
+                for(int j = 0; j < dupeNumber.getCountAppearencesCode(); j++){
+                    countCorrectNumbers++;
+                    if(dupeNumber.isCorrectlyPlaced(j)){
+                        countCorrectNumbersAndCorrectPlacement++;
+                    } else{
+                        countCorrectNumbersAndIncorrectPlacement--;
+                    }
+                }
+            }
 
+
+
+
+            
+
+
+           
         }
         
         
