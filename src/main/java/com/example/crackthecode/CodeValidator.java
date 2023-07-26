@@ -297,19 +297,30 @@ public class CodeValidator {
         // loop through the dupes in the possible code and count the number of times each dupe appears in the possible code and if the dupe is correctly placed with the combination
         for (int i = 0; i < dupesInPossibleCode.size(); i++) {
             int countAppearencesCode = 0; // Initialize count for each number - this is the count of the number of times the dupe appears in the possible code
-            int countAppearencesCombination = 0; // Initialize count for each number - this is the count of the number of times the dupe appears in the combination
+            int countTimesDupeInCombination = 0; // Initialize count for each number - this is the count of the number of times the dupe appears in the combination
             boolean CorrectlyPlaced = false; // Initialize CorrectlyPlaced for each number
             int currentDupe = dupesInPossibleCode.get(i);
             ArrayList<Boolean > dupeCorrectlyPlaced = new ArrayList<>();
 
 
+             countTimesDupeInCombination = 0;
+            for (int j = 0; j < combination.length; j++) {
+                if (dupesInPossibleCode.get(i) == combination[j]) {
+                    countTimesDupeInCombination++;
+                }
+            }
+
+            if(countTimesDupeInCombination == 0){
+                dupesInPossibleCode.remove(i);
+                i--;
+                continue;
+            }
             
             // index of the current dupe in the possible code
             int indexOfCurrentDupe = 0;
             for (int j = 0; j < possibleCode.length; j++) {
                 if (currentDupe == possibleCode[j]) {
                     indexOfCurrentDupe = j;
-
                 }
                 if (dupesInPossibleCode.get(i) == possibleCode[j]) {
                     countAppearencesCode++;
@@ -330,12 +341,8 @@ public class CodeValidator {
             }
             
 
-            int countTimesDupeInCombination = 0;
-            for (int j = 0; j < combination.length; j++) {
-                if (dupesInPossibleCode.get(i) == combination[j]) {
-                    countTimesDupeInCombination++;
-                }
-            }
+
+            
 
 
             if (dupeNumbers.containsKey(dupesInPossibleCode.get(i))) {
@@ -352,15 +359,43 @@ public class CodeValidator {
                 dupeAlreadyInHashMap.setCorrectlyPlaced(indexOfCurrentDupe, CorrectlyPlaced);
                 dupeNumbers.put(dupesInPossibleCode.get(i), dupeAlreadyInHashMap);
             } else {
-                dupeNumbers.put(dupesInPossibleCode.get(i), new DupeNumbers(dupesInPossibleCode.get(i), countAppearencesCode,countAppearencesCombination, dupeCorrectlyPlaced));
-        }
+                dupeNumbers.put(dupesInPossibleCode.get(i), new DupeNumbers(dupesInPossibleCode.get(i), countAppearencesCode,countTimesDupeInCombination, dupeCorrectlyPlaced));
         }
 
+    
+        }
+
+
+
+
+        // print dupeNumbers
+        for (Integer key : dupeNumbers.keySet()) {
+            DupeNumbers dupeNumber = dupeNumbers.get(key);
+            System.out.println("dupeNumber: " + dupeNumber.getNum() + " " + dupeNumber.getCountAppearencesCode() + " " + dupeNumber.getCountAppearencesCombination() + " " + dupeNumber.getCorrectlyPlaced());
+        }
 
         // print dupeCorrectlyPlaced
         // this will stores Digits that Appears an Equal amount of times in the combination and in the code and they appear More Then Ones 
         ArrayList<Integer> equalOccurrenceDigits = new ArrayList<>();
 
+
+
+        for(Integer key : dupeNumbers.keySet()){
+            DupeNumbers dupeNumber = dupeNumbers.get(key);
+            System.out.println("dupeNumber: " + dupeNumber.getNum() + " " + dupeNumber.getCountAppearencesCode() + " " + dupeNumber.getCountAppearencesCombination() + " " + dupeNumber.getCorrectlyPlaced());
+            if(dupeNumber.getCountAppearencesCode() == dupeNumber.getCountAppearencesCombination() && dupeNumber.getCountAppearencesCode() > 1){
+                equalOccurrenceDigits.add(dupeNumber.getNum());
+
+                
+            }
+
+
+
+        }
+
+
+        // print equalOccurrenceDigits
+        System.out.println("equalOccurrenceDigits: " + equalOccurrenceDigits);
 
         
         
@@ -372,15 +407,19 @@ public class CodeValidator {
         // count the number of correct numbers and correct placement and the number of correct numbers and incorrect placement in the possible code
         for (int i = 0; i < possibleCode.length; i++) {
             for (int j = 0; j < combination.length; j++) {
-                if (possibleCode[i] == combination[j]) {
-                    countCorrectNumbers++;
 
-                    if (i == j) {
-                        countCorrectNumbersAndCorrectPlacement++;
-                    } else {
-                        countCorrectNumbersAndIncorrectPlacement++;
+                // check that the number is not in the equalOccurrenceDigits array list
+                if (!equalOccurrenceDigits.contains(possibleCode[i])) {
+                    if (possibleCode[i] == combination[j]) {
+                        countCorrectNumbers++;
+
+                        if (i == j) {
+                            countCorrectNumbersAndCorrectPlacement++;
+                        } else {
+                            countCorrectNumbersAndIncorrectPlacement++;
+                        }
+
                     }
-
                 }
             }
         }
