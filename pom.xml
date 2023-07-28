@@ -11,7 +11,10 @@
         <maven.compiler.target>19</maven.compiler.target>
        <!-- <exec.mainClass>com.example.crackthecode.generatorOfCrackTheCodePuzzles</exec.mainClass> !-->
        <!-- <exec.mainClass>com.example.crackthecode.AllPossibleAdditions</exec.mainClass> !-->
-       <exec.mainClass>com.example.crackthecode.Main</exec.mainClass>
+        <!-- <exec.mainClass>com.example.crackthecode.Main</exec.mainClass> !-->
+       <exec.mainClass>com.example.crackthecode.temporary_main_for_testing</exec.mainClass>
+       
+       
     </properties>
     <dependencies>
 <dependency>

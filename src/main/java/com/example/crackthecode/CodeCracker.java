@@ -58,8 +58,7 @@ public class CodeCracker implements Cloneable, Serializable {
 
     public Integer[] crackCode() {
 
-        // go thorugh all combinations and add all the numbers to a list then add any number from 0-9 that is not in that list to the banned list
-        loopThroughAllCombinationsAndAddNumbersToBannedList();
+
         
 
         // first step to solve it will be to Check if there is a clue hint where none of the numbers are correct.
@@ -81,12 +80,17 @@ public class CodeCracker implements Cloneable, Serializable {
             // check if some of thme are solved
             SolveCombinationsCracked();
 
+            
+
             // check if the code was found
             if (checkIfCodeWasFound()) {
                 return code;
             }
 
         }
+
+        // go thorugh all combinations and add all the numbers to a list then add any number from 0-9 that is not in that list to the banned list
+        loopThroughAllCombinationsAndAddNumbersToBannedList();
 
         // loop trougth all clues and check if any clue has numbers placed wrongly if so add all those numbers to that baned list too. 
         loopThroughAllCluesAndAddNumbersToBannedListIfNotCorrectlyPlaced();
@@ -423,6 +427,7 @@ public class CodeCracker implements Cloneable, Serializable {
      * banned numbers and the numbers that are already discovered.
      */
     private ArrayList<Integer[]> getAllPossibleCombinations() {
+        
         SolveCombinationsCracked();
 
         ArrayList<Integer[]> combinations = new ArrayList<>();
@@ -456,7 +461,10 @@ public class CodeCracker implements Cloneable, Serializable {
         }
 
         for (int digit = 0; digit < 10; digit++) {
+            // print if the digit is in the banned list
+            System.out.println("digit: " + digit + " is in the banned list: " + bannedNumbers[index].contains(digit));
             if (!bannedNumbers[index].contains(digit)) {
+
                 currentCombination[index] = digit;
                 generateCombinations(combinations, currentCombination, index + 1);
             }
@@ -465,12 +473,29 @@ public class CodeCracker implements Cloneable, Serializable {
 
     private boolean checkIfCodeWasFound() {
 
+        if (clues.size() == 0) {
+                allPosibleArrayList = getAllPossibleCombinations();
+
+            if (allPosibleArrayList.size() == 1) {
+                code = allPosibleArrayList.get(0);
+                foundCode = true;
+                return true;
+
+            } 
+        }
+
+
+
+
         for (int i = 0; i < codeLength; i++) {
             if (code[i] == -1) {
                 return false;
 
             }
         }
+
+
+        
         foundCode = true;
 
         return true;

@@ -1,4 +1,5 @@
 com/example/crackthecode/Main.class
+com/example/crackthecode/temporary_main_for_testing.class
 com/example/crackthecode/CodeCracker.class
 com/example/crackthecode/generatorOfCrackTheCodePuzzles.class
 com/example/crackthecode/WriteSolutions.class
@@ -9,6 +10,5 @@ com/example/crackthecode/DataFactory.class
 com/example/crackthecode/CountsStat.class
 com/example/crackthecode/Clue.class
 com/example/crackthecode/DigitAndIndex.class
-com/example/crackthecode/CrackTheCodeModel.class
 com/example/crackthecode/AllPossibleAdditions.class
 com/example/crackthecode/CodeValidator.class
