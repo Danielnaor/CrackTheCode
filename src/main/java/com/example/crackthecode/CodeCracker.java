@@ -29,6 +29,9 @@ public class CodeCracker implements Cloneable, Serializable {
 
     public CodeCracker(List<Clue> clues_input) {
         this.clues = new ArrayList<Clue>();
+        
+        
+        
 
         for (Clue clue1 : clues_input) {
             this.clues.add((Clue) clue1.clone());
@@ -462,7 +465,7 @@ public class CodeCracker implements Cloneable, Serializable {
 
         for (int digit = 0; digit < 10; digit++) {
             // print if the digit is in the banned list
-            System.out.println("digit: " + digit + " is in the banned list: " + bannedNumbers[index].contains(digit));
+            System.out.println("digit: " + digit + " is in the banned list: " + bannedNumbers[index].contains(digit) + "(index : )" + index);
             if (!bannedNumbers[index].contains(digit)) {
 
                 currentCombination[index] = digit;

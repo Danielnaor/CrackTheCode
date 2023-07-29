@@ -145,7 +145,8 @@ public class Main implements Cloneable, Serializable {
         ArrayList<ArrayList<Clue>> allTestCases = new ArrayList<>();
         ArrayList<Clue> clues = new ArrayList<>();
         ArrayList<Integer[]> Solutions = new ArrayList<>();
-        /*
+       // 
+       /*
         // test case 1:
         clues.add(new Clue(new Integer[]{9, 2, 8, 5}, new Hint("One number is correct but wrong placed", 1, 0, 1, false)));
         clues.add(new Clue(new Integer[]{1, 9, 3, 7}, new Hint("Two numbers are correct but wrong placed", 2, 0, 2, false)));
@@ -226,11 +227,11 @@ public class Main implements Cloneable, Serializable {
         Solutions.add(new Integer[]{0, 0, 7});
         clues = new ArrayList<>();
 // */
-  /* 
+ // /* 
         // test case 8:
-      clues.add(new Clue(new Integer[]{0, 1, 2, 3}, new Hint("One number is correct and well placed", 1, 1, 0, true)));
-       clues.add(new Clue(new Integer[]{1, 0, 2, 3}, new Hint("one number is correct and well placed", 1, 1, 0, true)));
-      clues.add(new Clue(new Integer[]{2, 1, 0, 3}, new Hint("one number is correct and well placed", 1, 1, 0, true)));
+        clues.add(new Clue(new Integer[]{0, 1, 2, 3}, new Hint("One number is correct and well placed", 1, 1, 0, true)));
+         clues.add(new Clue(new Integer[]{1, 0, 2, 3}, new Hint("one number is correct and well placed", 1, 1, 0, true)));
+        clues.add(new Clue(new Integer[]{2, 1, 0, 3}, new Hint("one number is correct and well placed", 1, 1, 0, true)));
         clues.add(new Clue(new Integer[]{1, 2, 3, 4}, new Hint("nothing is correct", 0, 0, 0, false)));
         clues.add(new Clue(new Integer[]{1, 2, 3, 7}, new Hint("one number is correct and well placed", 1, 1, 0, true)));
         allTestCases.add(clues);
@@ -240,9 +241,9 @@ public class Main implements Cloneable, Serializable {
  
          clues = new ArrayList<>();
         
-
+ /*
          // test case 9:
-        clues.add(new Clue(new Integer[]{0, 1, 2, 3}, new Hint("one number is correct and well placed", 1, 1, 0, true)));
+       clues.add(new Clue(new Integer[]{0, 1, 2, 3}, new Hint("one number is correct and well placed", 1, 1, 0, true)));
         clues.add(new Clue(new Integer[]{1, 0, 2, 3}, new Hint("one number is correct and well placed", 1, 1, 0, true)));
         clues.add(new Clue(new Integer[]{1, 3, 2, 0}, new Hint("one number is correct but wrongly placed", 1, 0, 1, false)));
         clues.add(new Clue(new Integer[]{1, 7, 2, 3}, new Hint("one number is correct but wrongly placed", 1, 0, 1, false)));
@@ -252,7 +253,7 @@ public class Main implements Cloneable, Serializable {
         // solution: 0, 0 , 7 , 7
         Solutions.add(new Integer[]{0, 0, 7, 7});
         clues = new ArrayList<>();
-*/
+
 
         // test case 10: 
 // 0 0 0 0 nothing is correct
@@ -265,7 +266,8 @@ public class Main implements Cloneable, Serializable {
 // 7 7 7 7 nothing is correct
 // 8 8 8 8 nothing is correct
 // solution: 9, 9, 9, 9
-        clues.add(new Clue(new Integer[]{0, 0, 0, 0}, new Hint("nothing is correct", 0, 0, 0, false)));
+        
+clues.add(new Clue(new Integer[]{0, 0, 0, 0}, new Hint("nothing is correct", 0, 0, 0, false)));
         clues.add(new Clue(new Integer[]{1, 1, 1, 1}, new Hint("nothing is correct", 0, 0, 0, false)));
         clues.add(new Clue(new Integer[]{2, 2, 2, 2}, new Hint("nothing is correct", 0, 0, 0, false)));
         clues.add(new Clue(new Integer[]{3, 3, 3, 3}, new Hint("nothing is correct", 0, 0, 0, false)));
@@ -278,7 +280,7 @@ public class Main implements Cloneable, Serializable {
         // solution: 9, 9, 9, 9
         Solutions.add(new Integer[]{9, 9, 9, 9});
         clues = new ArrayList<>();
-
+//*/
 
 
         // convert ArrayList<Integer[]> Solutions to Integer[][] Solutions

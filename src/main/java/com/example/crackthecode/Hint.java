@@ -104,4 +104,9 @@ public class Hint implements Cloneable, Serializable {
         this(that.message, that.correctCount, that.countCorrectNumbersAndCorrectPlacement, that.countCorrectNumbersAndIncorrectPlacement, that.correctlyPlaced);
     }
 
+
+    public String getCounts(){
+        return this.correctCount + "," + this.countCorrectNumbersAndCorrectPlacement + "," + this.countCorrectNumbersAndIncorrectPlacement;
+    }
+
 }

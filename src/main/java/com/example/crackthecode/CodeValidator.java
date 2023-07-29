@@ -25,7 +25,10 @@ public class CodeValidator {
     ArrayList<Integer[]> allPosibleArrayList;
     private Integer[] finalCode;
 
+    private boolean foundFinalCode;
+
     public CodeValidator(List<Clue> clues, Integer[] code, ArrayList<Integer[]> allPosibleArrayList) {
+        foundFinalCode = false;
         this.clues = clues;
         if (code != null) {
             this.codeSolvedSoFar = code;
@@ -44,9 +47,6 @@ public class CodeValidator {
 
             boolean codeHasADuplicate = HasADuplicate(code);
 
-            // if there is a dupe in code and also combo doesnt equal  1,4,7,7
-
-            // print the combination and say combinationvalidateCode:
             if (codeHasADuplicate) {
                 if (!isHintMatchedDupe(hint, code, combination)) {
 
@@ -57,6 +57,32 @@ public class CodeValidator {
                 return false;
             }
         }
+
+        return true;
+    }
+
+    // validate a clue
+    public static boolean validateClue(Integer[] code, Clue clue) {
+
+        Hint hint = clue.getHint();
+        Integer[] combination = clue.getCombination();
+
+        boolean codeHasADuplicate = HasADuplicate(code);
+
+        System.out.println("codeHasADuplicate: " + codeHasADuplicate);
+
+        if (codeHasADuplicate) {
+            if (!isHintMatchedDupe(hint, code, combination)) {
+                return false;
+            }
+
+        }
+
+        if (!isHintMatched(hint, code, combination)) {
+
+            return false;
+        }
+
         return true;
     }
 
@@ -87,15 +113,19 @@ public class CodeValidator {
                     if (!matchedNumbers.contains(possibleCode[i])) {
                         countCorrectNumbers++;
                         matchedNumbers.add(possibleCode[i]);
+
                     }
                     if (i == j) {
                         countCorrectNumbersAndCorrectPlacement++;
                     } else {
                         countCorrectNumbersAndIncorrectPlacement++;
                     }
+
                 }
             }
         }
+
+        System.out.println(countCorrectNumbers + " " + countCorrectNumbersAndCorrectPlacement + " " + countCorrectNumbersAndIncorrectPlacement);
 
         return new CountsStat(countCorrectNumbers, countCorrectNumbersAndCorrectPlacement, countCorrectNumbersAndIncorrectPlacement);
     }
@@ -104,19 +134,16 @@ public class CodeValidator {
     // (matching the hint with the possible code meants that the number of correct numbers and correct placement and the number of correct numbers and incorrect placement are the same as the hint)
     //  Integer[] combinationT = new Integer[]{3,8,4,1};
     public void validateAllPossibleSolutionsWithHints() {
-
+        foundFinalCode = false;
         HashMap<Integer, Integer[]> allPossibleSolutionsHashMap = convertArrayListToHashMap(allPosibleArrayList);
         // print all allPossibleSolutionsHashMap
-       /* for (Integer key : allPossibleSolutionsHashMap.keySet()) {
+         for (Integer key : allPossibleSolutionsHashMap.keySet()) {
             Integer[] possibleCode = allPossibleSolutionsHashMap.get(key);
             System.out.println("possibleCode: " + Arrays.toString(possibleCode));
-        }*/
-       allPossibleSolutionsHashMap.remove(1);
-              allPossibleSolutionsHashMap.remove(2);
+        }
+       // allPossibleSolutionsHashMap.remove(1);
+      //  allPossibleSolutionsHashMap.remove(2);
 
-                
-                
-            
         for (Clue clue : clues) {
             Hint hint = clue.getHint();
             Integer[] combination = clue.getCombination();
@@ -125,7 +152,7 @@ public class CodeValidator {
             while (iterator.hasNext()) {
                 Map.Entry<Integer, Integer[]> entry = iterator.next();
                 Integer[] possibleCode = entry.getValue();
-                
+
                 if (HasADuplicate(possibleCode)) {
                     if (!isHintMatchedDupe(hint, possibleCode, combination)) {
                         iterator.remove(); // Remove the entry from the hashmap
@@ -136,8 +163,6 @@ public class CodeValidator {
 
             }
         }
-        
-        
 
         for (Integer key : allPossibleSolutionsHashMap.keySet()) {
             // final validation that the entry from allPossibleSolutionsHashMap matches with all the clues 
@@ -179,7 +204,7 @@ public class CodeValidator {
             //Integer[] keysArray = keySet.toArray(new Integer[keySet.size()]);
             //Integer key = keysArray[0];
             Integer key = allPossibleSolutionsHashMap.keySet().toArray(new Integer[1])[0];
-
+            foundFinalCode = true;
             System.out.println("The code is: " + Arrays.toString(allPossibleSolutionsHashMap.get(key)));
             finalCode = allPossibleSolutionsHashMap.get(key);
 
@@ -203,12 +228,7 @@ public class CodeValidator {
         // For example:
         // return hint.getCorrectCount() == calculateCorrectCount(possibleCode, combination)
         //        && hint.isCorrectlyPlaced() == isCorrectlyPlaced(possibleCode, combination);
-        
-        
-        
-        
-        
-        
+
         CountsStat codeResult = getCodeResult(possibleCode, combination);
 
         int countCorrectNumbers = codeResult.getCountCorrectNumbers();
@@ -290,9 +310,6 @@ public class CodeValidator {
 
         HashMap<Integer, DupeNumbers> dupeNumbers = new HashMap<>();
         // stores the times the dupe is placed correct and the times it isents placed correct
-        
-        
-        
 
         // loop through the dupes in the possible code and count the number of times each dupe appears in the possible code and if the dupe is correctly placed with the combination
         for (int i = 0; i < dupesInPossibleCode.size(); i++) {
@@ -300,22 +317,21 @@ public class CodeValidator {
             int countTimesDupeInCombination = 0; // Initialize count for each number - this is the count of the number of times the dupe appears in the combination
             boolean CorrectlyPlaced = false; // Initialize CorrectlyPlaced for each number
             int currentDupe = dupesInPossibleCode.get(i);
-            ArrayList<Boolean > dupeCorrectlyPlaced = new ArrayList<>();
+            ArrayList<Boolean> dupeCorrectlyPlaced = new ArrayList<>();
 
-
-             countTimesDupeInCombination = 0;
+            countTimesDupeInCombination = 0;
             for (int j = 0; j < combination.length; j++) {
                 if (dupesInPossibleCode.get(i) == combination[j]) {
                     countTimesDupeInCombination++;
                 }
             }
 
-            if(countTimesDupeInCombination == 0){
+            if (countTimesDupeInCombination == 0) {
                 dupesInPossibleCode.remove(i);
                 i--;
                 continue;
             }
-            
+
             // index of the current dupe in the possible code
             int indexOfCurrentDupe = 0;
             for (int j = 0; j < possibleCode.length; j++) {
@@ -326,12 +342,10 @@ public class CodeValidator {
                     countAppearencesCode++;
                     if (combination[j] == dupesInPossibleCode.get(i) && j == indexOfCurrentDupe) {
                         System.out.println(combination[j] + " " + " j= " + j + " combination: " + Arrays.toString(combination));
-                        
+
                         CorrectlyPlaced = true;
 
-                    }
-                    else 
-                    {
+                    } else {
                         CorrectlyPlaced = false;
                     }
 
@@ -339,11 +353,6 @@ public class CodeValidator {
                 }
 
             }
-            
-
-
-            
-
 
             if (dupeNumbers.containsKey(dupesInPossibleCode.get(i))) {
                 DupeNumbers dupeAlreadyInHashMap = dupeNumbers.get(dupesInPossibleCode.get(i));
@@ -359,14 +368,10 @@ public class CodeValidator {
                 dupeAlreadyInHashMap.setCorrectlyPlaced(indexOfCurrentDupe, CorrectlyPlaced);
                 dupeNumbers.put(dupesInPossibleCode.get(i), dupeAlreadyInHashMap);
             } else {
-                dupeNumbers.put(dupesInPossibleCode.get(i), new DupeNumbers(dupesInPossibleCode.get(i), countAppearencesCode,countTimesDupeInCombination, dupeCorrectlyPlaced, false));
+                dupeNumbers.put(dupesInPossibleCode.get(i), new DupeNumbers(dupesInPossibleCode.get(i), countAppearencesCode, countTimesDupeInCombination, dupeCorrectlyPlaced, false));
+            }
+
         }
-
-    
-        }
-
-
-
 
         // print dupeNumbers
         for (Integer key : dupeNumbers.keySet()) {
@@ -378,30 +383,21 @@ public class CodeValidator {
         // this will stores Digits that Appears an Equal amount of times in the combination and in the code and they appear More Then Ones 
         ArrayList<Integer> equalOccurrenceDigits = new ArrayList<>();
 
-
-
-        for(Integer key : dupeNumbers.keySet()){
+        for (Integer key : dupeNumbers.keySet()) {
             DupeNumbers dupeNumber = dupeNumbers.get(key);
             System.out.println("dupeNumber: " + dupeNumber.getNum() + " " + dupeNumber.getCountAppearencesCode() + " " + dupeNumber.getCountAppearencesCombination() + " " + dupeNumber.getCorrectlyPlaced());
-            if(dupeNumber.getCountAppearencesCode() == dupeNumber.getCountAppearencesCombination() && dupeNumber.getCountAppearencesCode() > 1){
+            if (dupeNumber.getCountAppearencesCode() == dupeNumber.getCountAppearencesCombination() && dupeNumber.getCountAppearencesCode() > 1) {
                 equalOccurrenceDigits.add(dupeNumber.getNum());
                 // set the isInEqualAppearences to true
                 dupeNumber.setIsInEqualAppearences(true);
 
-                
             }
 
-
-
         }
-
 
         // print equalOccurrenceDigits
         System.out.println("equalOccurrenceDigits: " + equalOccurrenceDigits);
 
-        
-        
-        
         int countCorrectNumbers = 0;
         int countCorrectNumbersAndCorrectPlacement = 0;
         int countCorrectNumbersAndIncorrectPlacement = 0;
@@ -425,46 +421,30 @@ public class CodeValidator {
                 }
             }
         }
-        
-        
-        
-        
-        
-        
 
         for (int i = 0; i < dupesInPossibleCode.size(); i++) {
-            
+
             int currentDupe = dupesInPossibleCode.get(i);
 
             DupeNumbers dupeNumber = dupeNumbers.get(currentDupe);
             // if the dupe is in not in equalOccurrenceDigits array list    
-            if(!dupeNumber.isInEqualAppearences()){
-                 countCorrectNumbersAndIncorrectPlacement -= dupeNumber.getCountAppearencesCode() - 1;
+            if (!dupeNumber.isInEqualAppearences()) {
+                countCorrectNumbersAndIncorrectPlacement -= dupeNumber.getCountAppearencesCode() - 1;
                 countCorrectNumbers -= dupeNumber.getCountAppearencesCode() - 1;
 
-            } else{
+            } else {
                 // do a for loop to add to the count then add wheter or not it is correctly placed
-                for(int j = 0; j < dupeNumber.getCountAppearencesCode(); j++){
+                for (int j = 0; j < dupeNumber.getCountAppearencesCode(); j++) {
                     countCorrectNumbers++;
-                    if(dupeNumber.isCorrectlyPlaced(j)){
+                    if (dupeNumber.isCorrectlyPlaced(j)) {
                         countCorrectNumbersAndCorrectPlacement++;
-                    } else{
+                    } else {
                         countCorrectNumbersAndIncorrectPlacement--;
                     }
                 }
             }
 
-
-
-
-            
-
-
-           
         }
-        
-        
-        
 
         System.out.println("possibleCode: " + Arrays.toString(possibleCode) + " " + countCorrectNumbers + " " + countCorrectNumbersAndCorrectPlacement + " " + countCorrectNumbersAndIncorrectPlacement);
 
@@ -505,4 +485,9 @@ public class CodeValidator {
     public Integer[] getFinalCode() {
         return finalCode;
     }
+
+    public boolean isFoundFinalCode() {
+        return foundFinalCode;
+    }
+
 }
