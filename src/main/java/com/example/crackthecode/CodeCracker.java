@@ -477,7 +477,6 @@ if(!allNumbersPresentInOneOfTheCombinations.isEmpty()){
 
         for (int digit = 0; digit < 10; digit++) {
             // print if the digit is in the banned list
-            System.out.println("digit: " + digit + " is in the banned list: " + bannedNumbers[index].contains(digit) + "(index : )" + index);
             if (!bannedNumbers[index].contains(digit)) {
 
                 currentCombination[index] = digit;

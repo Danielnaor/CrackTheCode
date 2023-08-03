@@ -26,6 +26,8 @@ public class CodeValidator {
     private Integer[] finalCode;
 
     private boolean foundFinalCode;
+    
+    static boolean debug = false;
 
     public CodeValidator(List<Clue> clues, Integer[] code, ArrayList<Integer[]> allPosibleArrayList) {
         foundFinalCode = false;
@@ -37,7 +39,7 @@ public class CodeValidator {
             this.codeSolvedSoFar = new Integer[clues.get(0).getCombination().length];
         }
         this.allPosibleArrayList = allPosibleArrayList;
-
+        
     }
 
     public static boolean validateCode(Integer[] code, List<Clue> clues) {
@@ -50,7 +52,7 @@ public class CodeValidator {
             if (codeHasADuplicate) {
                 if (!isHintMatchedDupe(hint, code, combination)) {
 
-                    return false;
+                    return false; 
                 }
 
             } else if (!isHintMatched(hint, code, combination)) {
@@ -131,9 +133,9 @@ public class CodeValidator {
                 }
             }
         }
-
-        System.out.println(countCorrectNumbers + " " + countCorrectNumbersAndCorrectPlacement + " " + countCorrectNumbersAndIncorrectPlacement);
-
+        if(true == debug){
+             System.out.println(countCorrectNumbers + " " + countCorrectNumbersAndCorrectPlacement + " " + countCorrectNumbersAndIncorrectPlacement);
+        }
         return new CorrectnessCountsResult(countCorrectNumbers, countCorrectNumbersAndCorrectPlacement, countCorrectNumbersAndIncorrectPlacement);
     }
 
