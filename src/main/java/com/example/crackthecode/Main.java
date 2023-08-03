@@ -77,6 +77,8 @@ public class Main implements Cloneable, Serializable {
 
 
                     CodeValidator codeValidator = new CodeValidator(clues, code, codeCracker.getAllPosibleArrayList());
+                    
+                    
                     codeValidator.validateAllPossibleSolutionsWithHints();
 
                    writeSolutions.addSolution(codeValidator.getFinalCode());
@@ -115,6 +117,9 @@ public class Main implements Cloneable, Serializable {
        
         for (int testCaseNum = 1; testCaseNum <= data.getSolutions().size(); testCaseNum++) {
             
+            //Integer[] solutionGot = writeSolutions.getSolutions().get(testCaseNum);
+
+            //System.out.println("solutionGot: " + Arrays.toString(solutionGot));
             
             Integer[] solutionGot = writeSolutions.getSolutions().get(testCaseNum);
             Integer[] solutionGiven = data.getSolutions().get(testCaseNum);
@@ -127,7 +132,7 @@ public class Main implements Cloneable, Serializable {
                 System.out.println("solutionGiven: " + Arrays.toString(solutionGiven));
 
                 testFailed = true;
-            }
+            }//*/
         }
 
         if(testFailed){
@@ -145,8 +150,7 @@ public class Main implements Cloneable, Serializable {
         ArrayList<ArrayList<Clue>> allTestCases = new ArrayList<>();
         ArrayList<Clue> clues = new ArrayList<>();
         ArrayList<Integer[]> Solutions = new ArrayList<>();
-       // 
-       /*
+       // /*
         // test case 1:
         clues.add(new Clue(new Integer[]{9, 2, 8, 5}, new Hint("One number is correct but wrong placed", 1, 0, 1, false)));
         clues.add(new Clue(new Integer[]{1, 9, 3, 7}, new Hint("Two numbers are correct but wrong placed", 2, 0, 2, false)));
@@ -216,8 +220,7 @@ public class Main implements Cloneable, Serializable {
 //*/ 
 
         // test case 7:
-//
-/*
+///*
         clues.add(new Clue(new Integer[]{5, 6, 7}, new Hint("One Number is correct and well placed", 1, 1, 0, true)));
         clues.add(new Clue(new Integer[]{4, 3, 5}, new Hint("Nothing is Correct", 0, 0, 0, false)));
         clues.add(new Clue(new Integer[]{0, 6, 7}, new Hint("Two Numbers are correct and well placed", 2, 2, 0, true)));
@@ -241,7 +244,7 @@ public class Main implements Cloneable, Serializable {
  
          clues = new ArrayList<>();
         
- /*
+ ///*
          // test case 9:
        clues.add(new Clue(new Integer[]{0, 1, 2, 3}, new Hint("one number is correct and well placed", 1, 1, 0, true)));
         clues.add(new Clue(new Integer[]{1, 0, 2, 3}, new Hint("one number is correct and well placed", 1, 1, 0, true)));
@@ -266,7 +269,7 @@ public class Main implements Cloneable, Serializable {
 // 7 7 7 7 nothing is correct
 // 8 8 8 8 nothing is correct
 // solution: 9, 9, 9, 9
-        
+        ///* 
 clues.add(new Clue(new Integer[]{0, 0, 0, 0}, new Hint("nothing is correct", 0, 0, 0, false)));
         clues.add(new Clue(new Integer[]{1, 1, 1, 1}, new Hint("nothing is correct", 0, 0, 0, false)));
         clues.add(new Clue(new Integer[]{2, 2, 2, 2}, new Hint("nothing is correct", 0, 0, 0, false)));
@@ -281,6 +284,12 @@ clues.add(new Clue(new Integer[]{0, 0, 0, 0}, new Hint("nothing is correct", 0, 
         Solutions.add(new Integer[]{9, 9, 9, 9});
         clues = new ArrayList<>();
 //*/
+
+
+
+
+        
+        
 
 
         // convert ArrayList<Integer[]> Solutions to Integer[][] Solutions
@@ -424,3 +433,15 @@ clues.add(new Clue(new Integer[]{0, 0, 0, 0}, new Hint("nothing is correct", 0, 
 // 7 7 7 7 nothing is correct
 // 8 8 8 8 nothing is correct
 // solution: 9, 9, 9, 9
+
+
+// test case 11:
+// 0 5 8 9 1 one number is correct but wrongly placed
+// 8 7 5 1 4 three numbers are correct but wrongly placed
+// 0 9 1 8 4 one number is correct but wrongly placed
+// 1 3 4 0 8 one number is correct and well placed
+// 1 7 3 8 0 one number is correct but wrongly placed
+// 3 0 6 1 7 two numbers are correct but wrongly placed
+// 1 6 8 2 9 two numbers are correct but wrongly placed
+// 0 8 1 3 2 one number is correct but wrongly placed
+// 0 9 8 3 1 nothing is correct

@@ -64,6 +64,13 @@ public class CodeValidator {
     // validate a clue
     public static boolean validateClue(Integer[] code, Clue clue) {
 
+        // print validinting thhe clue
+        System.out.println("validating clue:");
+        System.out.println("code: " + Arrays.toString(code));
+        System.out.println("clue: " + clue.toString());
+        
+
+
         Hint hint = clue.getHint();
         Integer[] combination = clue.getCombination();
 
@@ -71,18 +78,18 @@ public class CodeValidator {
 
         System.out.println("codeHasADuplicate: " + codeHasADuplicate);
 
+        
+
         if (codeHasADuplicate) {
-            if (!isHintMatchedDupe(hint, code, combination)) {
+                if (!isHintMatchedDupe(hint, code, combination)) {
+
+                    return false;
+                }
+
+            } else if (!isHintMatched(hint, code, combination)) {
                 return false;
             }
-
-        }
-
-        if (!isHintMatched(hint, code, combination)) {
-
-            return false;
-        }
-
+        
         return true;
     }
 
@@ -98,7 +105,7 @@ public class CodeValidator {
         return false;
     }
 
-    public static CountsStat getCodeResult(Integer[] possibleCode, Integer[] CombinationFromClue) {
+    public static CorrectnessCountsResult getCodeResult(Integer[] possibleCode, Integer[] CombinationFromClue) {
 
         int countCorrectNumbers = 0;
         int countCorrectNumbersAndCorrectPlacement = 0;
@@ -127,7 +134,7 @@ public class CodeValidator {
 
         System.out.println(countCorrectNumbers + " " + countCorrectNumbersAndCorrectPlacement + " " + countCorrectNumbersAndIncorrectPlacement);
 
-        return new CountsStat(countCorrectNumbers, countCorrectNumbersAndCorrectPlacement, countCorrectNumbersAndIncorrectPlacement);
+        return new CorrectnessCountsResult(countCorrectNumbers, countCorrectNumbersAndCorrectPlacement, countCorrectNumbersAndIncorrectPlacement);
     }
 
     // a method that will loop trought each hint and compare it to the possible code if the possible code matches the hint and if it does not match the hint it will remove it from the possible code\
@@ -216,6 +223,7 @@ public class CodeValidator {
             }
 
             finalCode = null;
+            foundFinalCode = false;
 
         }
 
@@ -229,7 +237,7 @@ public class CodeValidator {
         // return hint.getCorrectCount() == calculateCorrectCount(possibleCode, combination)
         //        && hint.isCorrectlyPlaced() == isCorrectlyPlaced(possibleCode, combination);
 
-        CountsStat codeResult = getCodeResult(possibleCode, combination);
+        CorrectnessCountsResult codeResult = getCodeResult(possibleCode, combination);
 
         int countCorrectNumbers = codeResult.getCountCorrectNumbers();
         int countCorrectNumbersHint = hint.getCorrectCount();
@@ -391,6 +399,11 @@ public class CodeValidator {
                 // set the isInEqualAppearences to true
                 dupeNumber.setIsInEqualAppearences(true);
 
+            } else if(dupeNumber.getCountAppearencesCode() > 1 && dupeNumber.getCountAppearencesCombination() == 1){
+                 for (int j = 0; j < dupeNumber.getCountAppearencesCode(); j++) {
+                     dupeNumber.setCorrectlyPlaced(j,true);
+                 }
+
             }
 
         }
@@ -409,18 +422,22 @@ public class CodeValidator {
                 // check that the number is not in the equalOccurrenceDigits array list
                 if (!equalOccurrenceDigits.contains(possibleCode[i])) {
                     if (possibleCode[i] == combination[j]) {
-                        countCorrectNumbers++;
+                        System.out.println(possibleCode[i] + "count is: " + countCorrectNumbers);
 
                         if (i == j) {
                             countCorrectNumbersAndCorrectPlacement++;
+                            countCorrectNumbers++;
                         } else {
                             countCorrectNumbersAndIncorrectPlacement++;
+                            countCorrectNumbers++;
                         }
 
                     }
                 }
             }
         }
+        
+        
 
         for (int i = 0; i < dupesInPossibleCode.size(); i++) {
 
@@ -432,14 +449,17 @@ public class CodeValidator {
                 countCorrectNumbersAndIncorrectPlacement -= dupeNumber.getCountAppearencesCode() - 1;
                 countCorrectNumbers -= dupeNumber.getCountAppearencesCode() - 1;
 
-            } else {
+            } 
+            else {
                 // do a for loop to add to the count then add wheter or not it is correctly placed
                 for (int j = 0; j < dupeNumber.getCountAppearencesCode(); j++) {
                     countCorrectNumbers++;
+                    
+      
                     if (dupeNumber.isCorrectlyPlaced(j)) {
                         countCorrectNumbersAndCorrectPlacement++;
                     } else {
-                        countCorrectNumbersAndIncorrectPlacement--;
+                        countCorrectNumbersAndIncorrectPlacement++;
                     }
                 }
             }
@@ -449,6 +469,7 @@ public class CodeValidator {
         System.out.println("possibleCode: " + Arrays.toString(possibleCode) + " " + countCorrectNumbers + " " + countCorrectNumbersAndCorrectPlacement + " " + countCorrectNumbersAndIncorrectPlacement);
 
         System.out.println("combination: " + Arrays.toString(combination) + " " + countCorrectNumbersHint + " " + countCorrectNumbersAndCorrectPlacementHint + " " + countCorrectNumbersAndIncorrectPlacementHint);
+       
         System.out.println(countCorrectNumbersHint == countCorrectNumbers
                 && countCorrectNumbersAndCorrectPlacementHint == countCorrectNumbersAndCorrectPlacement
                 && countCorrectNumbersAndIncorrectPlacementHint == countCorrectNumbersAndIncorrectPlacement);

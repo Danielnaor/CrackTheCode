@@ -93,7 +93,7 @@ public class CodeCracker implements Cloneable, Serializable {
         }
 
         // go thorugh all combinations and add all the numbers to a list then add any number from 0-9 that is not in that list to the banned list
-        loopThroughAllCombinationsAndAddNumbersToBannedList();
+       // loopThroughAllCombinationsAndAddNumbersToBannedList();
 
         // loop trougth all clues and check if any clue has numbers placed wrongly if so add all those numbers to that baned list too. 
         loopThroughAllCluesAndAddNumbersToBannedListIfNotCorrectlyPlaced();
@@ -177,11 +177,14 @@ public class CodeCracker implements Cloneable, Serializable {
                 // add the digit to the set
                 if (digit != null) {
                     allNumbersPresentInOneOfTheCombinations.add(digit);
+                 //   System.out.println("digit: " + digit);
                 }
+               // System.out.println("null digit");
             }
         }
+        
 
-
+if(!allNumbersPresentInOneOfTheCombinations.isEmpty()){
         // loop through all numbers from 0-9
         for (int i = 0; i < 10; i++) {
             // if the number is not in the set add it to the banned list
@@ -189,7 +192,7 @@ public class CodeCracker implements Cloneable, Serializable {
                 addNumberToBannedList(i);
             }
         }
-
+}
     }
 
     /**
@@ -218,10 +221,14 @@ public class CodeCracker implements Cloneable, Serializable {
      * @param num the number to be added to the banned list.
      */
     private void addNumberToBannedList(int num) {
-        // for each loop banned list, add the number
+        
+        
+        // if num equals to 0 print who called this method
+        if (num == 0) {
+            System.out.println("addNumberToBannedList was called from: " + Thread.currentThread().getStackTrace()[2].getMethodName());
+        }
 
-        // print the method that called this method
-    //    System.out.println("addNumberToBannedList was called from: " + Thread.currentThread().getStackTrace()[2].getMethodName());
+     
         for (List<Integer> bannedList : bannedNumbers) {
 
             if (!bannedList.contains(num)) {
@@ -238,6 +245,11 @@ public class CodeCracker implements Cloneable, Serializable {
      * @param index the index at which the number should be banned.
      */
     private void addNumberToBannedListAtSpecificIndex(int num, int index) {
+        // if num equals to 0 and index is 1 print who called this method
+        if (num == 0 && index == 1) {
+            System.out.println("addNumberToBannedListAtSpecificIndex was called from: " + Thread.currentThread().getStackTrace()[2].getMethodName());
+        }
+        
         if (!bannedNumbers[index].contains(num)) {
             bannedNumbers[index].add(num);
         }

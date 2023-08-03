@@ -13,9 +13,9 @@
        <!-- <exec.mainClass>com.example.crackthecode.IndexShuffler</exec.mainClass>!-->
         <!-- <exec.mainClass>com.example.crackthecode.Main</exec.mainClass> !-->
      <!-- <exec.mainClass>com.example.crackthecode.temporary_main_for_testing</exec.mainClass> !-->
-    <!-- <exec.mainClass>com.example.crackthecode.temporary_main_for_testing</exec.mainClass>!-->
-       
-           <exec.mainClass>com.example.crackthecode.Main</exec.mainClass> 
+      <!--   <exec.mainClass>com.example.crackthecode.Main</exec.mainClass>  !-->
+      
+<exec.mainClass>com.example.crackthecode.temporary_main_for_testing</exec.mainClass>
 
     </properties>
     <dependencies>
