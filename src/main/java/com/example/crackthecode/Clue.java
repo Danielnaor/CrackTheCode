@@ -5,12 +5,12 @@
 package com.example.crackthecode;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  *
  * @author Danielnaor
  */
-
 public class Clue implements Cloneable, Serializable {
 
     private Integer[] combination;
@@ -43,12 +43,15 @@ public class Clue implements Cloneable, Serializable {
 
     @Override
     public String toString() {
-        String s = "";
-        for (int i = 0; i < combination.length; i++) {
-            s += combination[i] + " ";
+
+        String output = "";
+        for (Integer digit : combination) {
+            output += digit + " ";
         }
-        s += " " + hint.toString();
-        return s;
+
+        output += " " + hint.getMessage();
+
+        return output;
 
     }
 

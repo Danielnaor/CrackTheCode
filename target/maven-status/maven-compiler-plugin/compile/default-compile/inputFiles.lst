@@ -1,8 +1,8 @@
-/Users/carmitnaor/NetBeansProjects/CrackTheCode/src/main/java/com/example/crackthecode/RiddleGenerator2.java
+/Users/carmitnaor/NetBeansProjects/CrackTheCode/src/main/java/com/example/crackthecode/GraphicPanel.java
 /Users/carmitnaor/NetBeansProjects/CrackTheCode/src/main/java/com/example/crackthecode/CorrectnessCountsResult.java
 /Users/carmitnaor/NetBeansProjects/CrackTheCode/src/main/java/com/example/crackthecode/Hint.java
-/Users/carmitnaor/NetBeansProjects/CrackTheCode/src/main/java/com/example/crackthecode/Main.java
 /Users/carmitnaor/NetBeansProjects/CrackTheCode/src/main/java/com/example/crackthecode/WriteSolutions.java
+/Users/carmitnaor/NetBeansProjects/CrackTheCode/src/main/java/com/example/crackthecode/CustomShuffle.java
 /Users/carmitnaor/NetBeansProjects/CrackTheCode/src/main/java/com/example/crackthecode/TestFileCreator.java
 /Users/carmitnaor/NetBeansProjects/CrackTheCode/src/main/java/com/example/crackthecode/CodeCracker.java
 /Users/carmitnaor/NetBeansProjects/CrackTheCode/src/main/java/com/example/crackthecode/IndexShuffler.java
@@ -12,5 +12,6 @@
 /Users/carmitnaor/NetBeansProjects/CrackTheCode/src/main/java/com/example/crackthecode/Clue.java
 /Users/carmitnaor/NetBeansProjects/CrackTheCode/src/main/java/com/example/crackthecode/Riddle.java
 /Users/carmitnaor/NetBeansProjects/CrackTheCode/src/main/java/com/example/crackthecode/DataFactory.java
+/Users/carmitnaor/NetBeansProjects/CrackTheCode/src/main/java/com/example/crackthecode/MainTestingSolver.java
 /Users/carmitnaor/NetBeansProjects/CrackTheCode/src/main/java/com/example/crackthecode/DigitAndIndex.java
 /Users/carmitnaor/NetBeansProjects/CrackTheCode/src/main/java/com/example/crackthecode/DupeNumbers.java

@@ -4,7 +4,6 @@
  */
 package com.example.crackthecode;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -72,7 +71,6 @@ public class CodeValidator {
         System.out.println("clue: " + clue.toString());
         
 
-
         Hint hint = clue.getHint();
         Integer[] combination = clue.getCombination();
 
@@ -136,6 +134,7 @@ public class CodeValidator {
         if(true == debug){
              System.out.println(countCorrectNumbers + " " + countCorrectNumbersAndCorrectPlacement + " " + countCorrectNumbersAndIncorrectPlacement);
         }
+        
         return new CorrectnessCountsResult(countCorrectNumbers, countCorrectNumbersAndCorrectPlacement, countCorrectNumbersAndIncorrectPlacement);
     }
 
@@ -150,9 +149,7 @@ public class CodeValidator {
             Integer[] possibleCode = allPossibleSolutionsHashMap.get(key);
             System.out.println("possibleCode: " + Arrays.toString(possibleCode));
         }
-       // allPossibleSolutionsHashMap.remove(1);
-      //  allPossibleSolutionsHashMap.remove(2);
-
+    
         for (Clue clue : clues) {
             Hint hint = clue.getHint();
             Integer[] combination = clue.getCombination();
@@ -180,14 +177,6 @@ public class CodeValidator {
                 Integer[] combination = clue.getCombination();
                 Integer[] possibleCode = allPossibleSolutionsHashMap.get(key);
 
-                /*if (!isHintMatched(hint, possibleCode, combination)) {
-                    allPossibleSolutionsHashMap.remove(key);
-                    break;
-               } else if (isHintMatched(hint, possibleCode, combination)) {
-
-                    continue;
-                }
-                 */
                 if (HasADuplicate(possibleCode)) {
                     if (!isHintMatchedDupe(hint, possibleCode, combination)) {
                         allPossibleSolutionsHashMap.remove(key);

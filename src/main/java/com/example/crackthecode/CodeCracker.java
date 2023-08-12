@@ -4,14 +4,12 @@
  */
 package com.example.crackthecode;
 
-import java.io.Serializable;
-import java.lang.reflect.Array;
 /**
  *
  * @author Danielnaor
  */
-// CodeCracker.java
 import java.util.*;
+import java.io.Serializable;
 
 public class CodeCracker implements Cloneable, Serializable {
 
@@ -29,9 +27,6 @@ public class CodeCracker implements Cloneable, Serializable {
 
     public CodeCracker(List<Clue> clues_input) {
         this.clues = new ArrayList<Clue>();
-        
-        
-        
 
         for (Clue clue1 : clues_input) {
             this.clues.add((Clue) clue1.clone());
@@ -61,12 +56,9 @@ public class CodeCracker implements Cloneable, Serializable {
 
     public Integer[] crackCode() {
 
-
-        
-
         // first step to solve it will be to Check if there is a clue hint where none of the numbers are correct.
-        // if so              // add it that clue's combinations into the banned list of all indexes and then delete that clue
-        while (checkNothingCorrect()) {
+        // if so add it that clue's combinations into the banned list of all indexes and then delete that clue
+        while (LookForNothingCorrect()) {
             // add it that clue's combinations into the banned list of all indexes, then loop through all clues and remove numbers from the banned list
             Integer[] combinationDigits = clues.get(ClueNothingCorrectIndex).getCombination();
             for (int i = 0; i < combinationDigits.length; i++) {
@@ -83,50 +75,49 @@ public class CodeCracker implements Cloneable, Serializable {
             // check if some of thme are solved
             SolveCombinationsCracked();
 
-            
-
             // check if the code was found
             if (checkIfCodeWasFound()) {
+                foundCode = true;
                 return code;
             }
 
         }
 
         // go thorugh all combinations and add all the numbers to a list then add any number from 0-9 that is not in that list to the banned list
-       // loopThroughAllCombinationsAndAddNumbersToBannedList();
-
+        // loopThroughAllCombinationsAndAddNumbersToBannedList();
         // loop trougth all clues and check if any clue has numbers placed wrongly if so add all those numbers to that baned list too. 
         loopThroughAllCluesAndAddNumbersToBannedListIfNotCorrectlyPlaced();
-        
 
         SolveCombinationsCracked();
 
         // loop thorught all the combinations and remove numbers that are in the banned list
-        loopThroughAllCombinationsAndRemovedBannedNumbers();        
-
-        System.out.println("\n");
+        loopThroughAllCombinationsAndRemovedBannedNumbers();
 
         SolveCombinationsCracked();
-        
-        
-        
+
+        banDuplicatedNumbers();
+
+        loopThroughAllCombinationsAndRemovedBannedNumbers();
 
         if (checkIfCodeWasFound()) {
-
+            foundCode = true;
             return code;
-        }  else {
-            
+        } else {
 
-                    SolveCombinationsCracked();
+            SolveCombinationsCracked();
 
             // all possible combinations are in the clues
             allPosibleArrayList = getAllPossibleCombinations();
 
             if (allPosibleArrayList.size() == 1) {
                 code = allPosibleArrayList.get(0);
+                foundCode = true;
+
                 return code;
 
             } else {
+                
+                System.out.println("allPosibleArrayList size: " +  allPosibleArrayList.size());
                 // loop through and print all the possible combinations
                 for (Integer[] combination : allPosibleArrayList) {
                     if (!checkIfCombinationIsValid(combination)) {
@@ -144,8 +135,8 @@ public class CodeCracker implements Cloneable, Serializable {
                 foundCode = true;
                 return code;
 
-            } 
-            
+            }
+
             System.out.println("part code: " + Arrays.toString(code));
 
             System.out.println("remaining clues: ");
@@ -155,10 +146,7 @@ public class CodeCracker implements Cloneable, Serializable {
 
             // print all the CorrectNumbersButWrongPlace
             System.out.println("CorrectNumbersButWrongPlace: " + CorrectNumbersButWrongPlace);
-            
-            
-            
-            
+
             return null;
 
         }
@@ -177,22 +165,21 @@ public class CodeCracker implements Cloneable, Serializable {
                 // add the digit to the set
                 if (digit != null) {
                     allNumbersPresentInOneOfTheCombinations.add(digit);
-                 //   System.out.println("digit: " + digit);
+                    //   System.out.println("digit: " + digit);
                 }
-               // System.out.println("null digit");
+                // System.out.println("null digit");
             }
         }
-        
 
-if(!allNumbersPresentInOneOfTheCombinations.isEmpty()){
-        // loop through all numbers from 0-9
-        for (int i = 0; i < 10; i++) {
-            // if the number is not in the set add it to the banned list
-            if (!allNumbersPresentInOneOfTheCombinations.contains(i)) {
-                addNumberToBannedList(i);
+        if (!allNumbersPresentInOneOfTheCombinations.isEmpty()) {
+            // loop through all numbers from 0-9
+            for (int i = 0; i < 10; i++) {
+                // if the number is not in the set add it to the banned list
+                if (!allNumbersPresentInOneOfTheCombinations.contains(i)) {
+                    addNumberToBannedList(i);
+                }
             }
         }
-}
     }
 
     /**
@@ -200,7 +187,7 @@ if(!allNumbersPresentInOneOfTheCombinations.isEmpty()){
      *
      * @return true if there is a clue with no correct numbers, false otherwise.
      */
-    private boolean checkNothingCorrect() {
+    private boolean LookForNothingCorrect() {
 
         // loop between clues
         for (int i = 0; i < clues.size(); i++) {
@@ -221,14 +208,12 @@ if(!allNumbersPresentInOneOfTheCombinations.isEmpty()){
      * @param num the number to be added to the banned list.
      */
     private void addNumberToBannedList(int num) {
-        
-        
+
         // if num equals to 0 print who called this method
         if (num == 0) {
             System.out.println("addNumberToBannedList was called from: " + Thread.currentThread().getStackTrace()[2].getMethodName());
         }
 
-     
         for (List<Integer> bannedList : bannedNumbers) {
 
             if (!bannedList.contains(num)) {
@@ -249,7 +234,7 @@ if(!allNumbersPresentInOneOfTheCombinations.isEmpty()){
         if (num == 0 && index == 1) {
             System.out.println("addNumberToBannedListAtSpecificIndex was called from: " + Thread.currentThread().getStackTrace()[2].getMethodName());
         }
-        
+
         if (!bannedNumbers[index].contains(num)) {
             bannedNumbers[index].add(num);
         }
@@ -265,7 +250,6 @@ if(!allNumbersPresentInOneOfTheCombinations.isEmpty()){
      */
     private void SolveCombinationsCracked() {
 
-
         int NumOfNumbersNotNull = 0;
         int numOfCorrectNumbersInClueAndCorrectlyPlaced = 0;
         int numOfCorrectNumbersInClueAndIncorrectlyPlaced = 0;
@@ -277,16 +261,14 @@ if(!allNumbersPresentInOneOfTheCombinations.isEmpty()){
         for (int j = 0; j < clues.size(); j++) {
             Clue clue = clues.get(j);
             NumOfNumbersNotNull = 0;
-            numOfCorrectNumbersInClueAndCorrectlyPlaced = clue.getHint().   getCountCorrectNumbersAndCorrectPlacement();
+            numOfCorrectNumbersInClueAndCorrectlyPlaced = clue.getHint().getCountCorrectNumbersAndCorrectPlacement();
             numOfCorrectNumbersInClueAndIncorrectlyPlaced = clue.getHint().getCountCorrectNumbersAndIncorrectPlacement();
             int numOfCorrectNumbersInClue = clue.getHint().getCorrectCount();
 
-            if(numOfCorrectNumbersInClue != (numOfCorrectNumbersInClueAndCorrectlyPlaced+numOfCorrectNumbersInClueAndIncorrectlyPlaced))
-            {
+            if (numOfCorrectNumbersInClue != (numOfCorrectNumbersInClueAndCorrectlyPlaced + numOfCorrectNumbersInClueAndIncorrectlyPlaced)) {
                 throw new RuntimeException("the number of correct numbers in the clue is not equal to the number of correct numbers and correct placement and the number of correct numbers and incorrect placement");
             }
 
-            
             NumbersNotNullAndIndexes = new ArrayList<>();
 
             Integer[] combinationDigits = clue.getCombination();
@@ -305,7 +287,7 @@ if(!allNumbersPresentInOneOfTheCombinations.isEmpty()){
             }
 
             if (NumOfNumbersNotNull == numOfCorrectNumbersInClue && clue.getHint().isCorrectlyPlaced()) {
-                
+
                 // loop through the NumbersNotNullAndIndexes and add the numbers to the code
                 for (DigitAndIndex digitAndIndex : NumbersNotNullAndIndexes) {
                     code[digitAndIndex.getIndex()] = digitAndIndex.getDigit();
@@ -320,12 +302,9 @@ if(!allNumbersPresentInOneOfTheCombinations.isEmpty()){
                         CorrectNumbersButWrongPlace.add(digitAndIndex.getDigit());
                     }
                 }
-                
-                
-                indexesOfSolvedHintsThatNeedsToBeRemoved.add(j);
-            }
 
-            else if( NumOfNumbersNotNull == numOfCorrectNumbersInClue && clue.getHint().getCountCorrectNumbersAndCorrectPlacement() >= 1 && clue.getHint().getCountCorrectNumbersAndIncorrectPlacement() >= 1){
+                indexesOfSolvedHintsThatNeedsToBeRemoved.add(j);
+            } else if (NumOfNumbersNotNull == numOfCorrectNumbersInClue && clue.getHint().getCountCorrectNumbersAndCorrectPlacement() >= 1 && clue.getHint().getCountCorrectNumbersAndIncorrectPlacement() >= 1) {
 
 // add the numbers from to the Correct Numbers But Wrong Place NumbersNotNullAndIndexes
                 for (DigitAndIndex digitAndIndex : NumbersNotNullAndIndexes) {
@@ -333,10 +312,8 @@ if(!allNumbersPresentInOneOfTheCombinations.isEmpty()){
                         CorrectNumbersButWrongPlace.add(digitAndIndex.getDigit());
                     }
                 }
-            
 
-
-            } 
+            }
 
             // remove the solved clues from the clues list
             // make sure that the indexes are removed from the end to the start in order to not mess up the indexes mkae that the indexes are sorted
@@ -347,10 +324,6 @@ if(!allNumbersPresentInOneOfTheCombinations.isEmpty()){
             }
 
         }
-
-        
-
-                        
 
     }
 
@@ -363,42 +336,33 @@ if(!allNumbersPresentInOneOfTheCombinations.isEmpty()){
         // if the say that the numbers are not correctly placed, move through the combination and for each digit add it to the banned list of that index
         // loop through all clues
         /// call isCluePlacedCorrectly and if false start comparing to the other combinations. 
-        for(Clue clue: clues){
-        
-            if(!isCluePlacedCorrectly(clue)){
+        for (Clue clue : clues) {
+
+            if (!isCluePlacedCorrectly(clue)) {
                 // loop trought all indexes
                 Integer[] combinationDigits = clue.getCombination();
                 for (int i = 0; i < combinationDigits.length; i++) {
                     Integer digit = combinationDigits[i];
                     // if the digit is not null, check if at any other clues the digit at that index is the same and is correctly placed, if so add it to the banned list of that index
                     if (digit != null) {
-                        for(int j = 0; j < clues.size(); j++){
+                        for (int j = 0; j < clues.size(); j++) {
                             Clue clue2 = clues.get(j);
-                            if(isCluePlacedCorrectly(clue2)){
+                            if (isCluePlacedCorrectly(clue2)) {
                                 Integer[] combinationDigits2 = clue2.getCombination();
-                                if(i != j && combinationDigits2[i] == digit){
+                                if (i != j && combinationDigits2[i] == digit) {
                                     addNumberToBannedList(digit);
                                 }
                             }
                         }
-                       
+
                     }
                 }
             }
         }
 
-                loopThroughAllCombinationsAndRemovedBannedNumbers();
+        loopThroughAllCombinationsAndRemovedBannedNumbers();
 
-
-        
     }
-
-  
-
-
-
-
-
 
     public boolean isCluePlacedCorrectly(Clue clue) {
         return clue.getHint().isCorrectlyPlaced();
@@ -412,10 +376,9 @@ if(!allNumbersPresentInOneOfTheCombinations.isEmpty()){
      * number with a null
      */
     private void loopThroughAllCombinationsAndRemovedBannedNumbers() {
-        
-        // print what method called this method(loopThroughAllCombinationsAndRemovedBannedNumbers)
-     //   System.out.println("the method which called loopThroughAllCombinationsAndRemovedBannedNumbers: " + Thread.currentThread().getStackTrace()[2].getMethodName());
 
+        // print what method called this method(loopThroughAllCombinationsAndRemovedBannedNumbers)
+        //   System.out.println("the method which called loopThroughAllCombinationsAndRemovedBannedNumbers: " + Thread.currentThread().getStackTrace()[2].getMethodName());
         for (Clue clue : clues) {
             Integer[] combinationDigits = clue.getCombination();
             // loop through all digits of combinations
@@ -432,8 +395,7 @@ if(!allNumbersPresentInOneOfTheCombinations.isEmpty()){
             }
         }
 
-                SolveCombinationsCracked();
-
+        SolveCombinationsCracked();
 
     }
 
@@ -442,7 +404,7 @@ if(!allNumbersPresentInOneOfTheCombinations.isEmpty()){
      * banned numbers and the numbers that are already discovered.
      */
     private ArrayList<Integer[]> getAllPossibleCombinations() {
-        
+
         SolveCombinationsCracked();
 
         ArrayList<Integer[]> combinations = new ArrayList<>();
@@ -459,7 +421,6 @@ if(!allNumbersPresentInOneOfTheCombinations.isEmpty()){
             }
         }
 
-        
         return combinations;
     }
 
@@ -488,18 +449,15 @@ if(!allNumbersPresentInOneOfTheCombinations.isEmpty()){
     private boolean checkIfCodeWasFound() {
 
         if (clues.size() == 0) {
-                allPosibleArrayList = getAllPossibleCombinations();
+            allPosibleArrayList = getAllPossibleCombinations();
 
             if (allPosibleArrayList.size() == 1) {
                 code = allPosibleArrayList.get(0);
                 foundCode = true;
                 return true;
 
-            } 
+            }
         }
-
-
-
 
         for (int i = 0; i < codeLength; i++) {
             if (code[i] == -1) {
@@ -508,8 +466,6 @@ if(!allNumbersPresentInOneOfTheCombinations.isEmpty()){
             }
         }
 
-
-        
         foundCode = true;
 
         return true;
@@ -531,14 +487,62 @@ if(!allNumbersPresentInOneOfTheCombinations.isEmpty()){
         return true;
     }
 
-
-
     public boolean isFoundCode() {
         return foundCode;
     }
 
     public void setFoundCode(boolean foundCode) {
         this.foundCode = foundCode;
+    }
+
+    // this method will ban all numbers that are duplicated in the clues and the number of time they are duplicated is more than the amount of correct numbers in the clue
+    public void banDuplicatedNumbers() {
+        // loop through all clues
+        for (Clue clue : clues) {
+            // loop through all combinations
+            Integer[] combination = clue.getCombination();
+            for (int i = 0; i < combination.length; i++) {
+                Integer digit = combination[i];
+                // if the digit is not null, check if it is in the banned list of that index, if so replace it with null
+                if (digit != null) {
+                    // check if the digit is duplicated in the combination
+                    if (checkIfDigitIsDuplicatedInCombination(digit, combination)) {
+                        // check if the number of times the digit is duplicated is more than the number of correct numbers in the clue
+                        if (getNumberOfTimesDigitIsDuplicatedInCombination(digit, combination) > clue.getHint().getCorrectCount()) {
+                            // ban the digit at all indexes
+                            addNumberToBannedList(digit);
+                            //addNumberToBannedListAtSpecificIndex(digit, i);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // method to check if a digit is duplicated in a combination
+    private boolean checkIfDigitIsDuplicatedInCombination(Integer digit, Integer[] combination) {
+        int count = 0;
+        for (Integer digit2 : combination) {
+            if (digit2 == digit) {
+                count++;
+            }
+        }
+        if (count > 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // method to get the number of times a digit is duplicated in a combination
+    private int getNumberOfTimesDigitIsDuplicatedInCombination(Integer digit, Integer[] combination) {
+        int count = 0;
+        for (Integer digit2 : combination) {
+            if (digit2 == digit) {
+                count++;
+            }
+        }
+        return count;
     }
 
 }

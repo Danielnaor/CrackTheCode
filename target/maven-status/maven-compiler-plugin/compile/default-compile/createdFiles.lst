@@ -1,8 +1,8 @@
-com/example/crackthecode/Main.class
 com/example/crackthecode/temporary_main_for_testing.class
 com/example/crackthecode/CodeCracker.class
 com/example/crackthecode/CorrectnessCountsResult.class
-com/example/crackthecode/RiddleGenerator2.class
+com/example/crackthecode/CustomShuffle.class
+com/example/crackthecode/GraphicPanel.class
 com/example/crackthecode/WriteSolutions.class
 com/example/crackthecode/TestFileCreator.class
 com/example/crackthecode/Hint.class
@@ -10,6 +10,7 @@ com/example/crackthecode/Riddle.class
 com/example/crackthecode/IndexShuffler.class
 com/example/crackthecode/DupeNumbers.class
 com/example/crackthecode/DataFactory.class
+com/example/crackthecode/MainTestingSolver.class
 com/example/crackthecode/RiddleGenerator.class
 com/example/crackthecode/Clue.class
 com/example/crackthecode/DigitAndIndex.class
