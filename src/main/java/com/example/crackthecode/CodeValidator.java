@@ -4,6 +4,7 @@
  */
 package com.example.crackthecode;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -39,6 +40,9 @@ public class CodeValidator {
         }
         this.allPosibleArrayList = allPosibleArrayList;
         
+        
+                PrintStream originalOut = System.out;
+
     }
 
     public static boolean validateCode(Integer[] code, List<Clue> clues) {

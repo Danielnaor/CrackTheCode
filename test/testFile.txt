@@ -1,0 +1,9 @@
+1
+4
+8	9	5	1	Two digits are correct but wrongly placed	2	0	2	false
+2	1	6	9	One digit is correct and well placed and Another digit right but in wrongly placed	2	1	1	false
+3	6	9	4	One digit right and in the right place. Another digit right but in wrong place.	2	1	1	false
+4	7	2	1	One digit right and in the right place. Another digit right but in wrong place.	2	1	1	false
+1	2	3	7	Three digits are right but all are at wrong place.	3	0	3	false
+END
+[3, 7, 1, 9]
