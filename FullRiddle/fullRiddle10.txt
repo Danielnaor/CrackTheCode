@@ -1,1 +1,0 @@
-Riddle{solution=null, codeLength=3, maxHints=6, base=10, clues=null, solvable=false, numPossibilities=null}

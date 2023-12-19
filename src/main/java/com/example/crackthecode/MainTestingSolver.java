@@ -8,12 +8,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -59,36 +60,18 @@ public class MainTestingSolver implements Cloneable, Serializable {
 
             if (!foundCode) {
 // make sure the code is correct by checking it with the clues and the codevalidator
-                System.out.println("All possible solutions size:" + codeCracker.getAllPosibleArrayList().size());
-           
+
                 // print all possible solutions
                 System.out.println("All possible solutions:");
-        /*        for (Integer[] possibleSolution : codeCracker.getAllPosibleArrayList()) {
+                for (Integer[] possibleSolution : codeCracker.getAllPosibleArrayList()) {
                     System.out.println(Arrays.toString(possibleSolution));
                 }
-//*/            
-          // Save the original System.out
-        PrintStream originalOut = System.out;
-               
-        // Create a PrintStream that does nothing
-        PrintStream dummyStream = new PrintStream(new NoOutputStream());
 
-        // Set System.out to the dummyStream
-        System.setOut(dummyStream);
+                CodeValidator codeValidator = new CodeValidator(clues, code, codeCracker.getAllPosibleArrayList());
 
-        // Your code here
-        
-         CodeValidator codeValidator = new CodeValidator(clues, code, codeCracker.getAllPosibleArrayList());
-codeValidator.validateAllPossibleSolutionsWithHints();
+                codeValidator.validateAllPossibleSolutionsWithHints();
 
                 writeSolutions.addSolution(codeValidator.getFinalCode());
-
-        // Reset System.out to the originalOut when you want to enable printing again
-        System.setOut(originalOut);
-        
-        
-
-                
 
             } else {
                 System.out.println("The code was found in crackCode() method test case num is " + testCaseNum);
@@ -143,7 +126,7 @@ codeValidator.validateAllPossibleSolutionsWithHints();
         ArrayList<ArrayList<Clue>> allTestCases = new ArrayList<>();
         ArrayList<Clue> clues = new ArrayList<>();
         ArrayList<Integer[]> Solutions = new ArrayList<>();
-       /* // test case 1:
+      // /* // test case 1:
         clues.add(new Clue(new Integer[]{9, 2, 8, 5}, new Hint("One number is correct but wrong placed", 1, 0, 1, false)));
         clues.add(new Clue(new Integer[]{1, 9, 3, 7}, new Hint("Two numbers are correct but wrong placed", 2, 0, 2, false)));
         clues.add(new Clue(new Integer[]{5, 2, 0, 1}, new Hint("One number is correct and well placed", 1, 1, 0, true)));
@@ -179,7 +162,6 @@ codeValidator.validateAllPossibleSolutionsWithHints();
         Solutions.add(new Integer[]{1, 3, 5});
         clues = new ArrayList<>();
 //*/
-/* 
         // test case 4:
         clues.add(new Clue(new Integer[]{0, 1, 2}, new Hint("one number is correct and well placed", 1, 1, 0, true)));
         clues.add(new Clue(new Integer[]{2, 3, 0}, new Hint("one number is correct but wrongly placed", 1, 0, 1, false)));
@@ -188,9 +170,7 @@ codeValidator.validateAllPossibleSolutionsWithHints();
         allTestCases.add(clues);
         Solutions.add(new Integer[]{4, 8, 2});
         clues = new ArrayList<>();
-//*/
-
-        ///*
+///*
         // test case 5:
         clues.add(new Clue(new Integer[]{8, 9, 5, 1}, new Hint("Two digits are correct but wrongly placed", 2, 0, 2, false)));
         clues.add(new Clue(new Integer[]{2, 1, 6, 9}, new Hint("One digit is correct and well placed and Another digit right but in wrongly placed", 2, 1, 1, false)));
@@ -200,7 +180,7 @@ codeValidator.validateAllPossibleSolutionsWithHints();
         allTestCases.add(clues);
         Solutions.add(new Integer[]{3, 7, 1, 9});
         clues = new ArrayList<>();
-/* 
+
         // test case 6:
         clues.add(new Clue(new Integer[]{2, 3, 4}, new Hint("Two Numbers are correct. One well placed and other wrongly placed.", 2, 1, 1, false)));
         clues.add(new Clue(new Integer[]{5, 6, 7}, new Hint("Nothing is Correct", 0, 0, 0, false)));
@@ -308,14 +288,6 @@ codeValidator.validateAllPossibleSolutionsWithHints();
         return null;
     }
 
-}
-
-// A custom OutputStream that does nothing
-class NoOutputStream extends java.io.OutputStream {
-    @Override
-    public void write(int b) {
-        // Do nothing
-    }
 }
 
 // test case 1:

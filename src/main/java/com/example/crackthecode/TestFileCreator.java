@@ -7,9 +7,16 @@ package com.example.crackthecode;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+
+/**
+ *
+ * @author carmitnaor
+ */
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.regex.Pattern;
 
 public class TestFileCreator {
 
@@ -42,11 +49,8 @@ public class TestFileCreator {
                 fileName += ".txt";
             }
 
-           System.out.println("filePath: " + filePath); 
-         //   String[] filePathParts = filePath.split(File.separator);
-           String[] filePathParts = filePath.split(Pattern.quote(File.separator));
-
-         String currentPath = "";
+            String[] filePathParts = filePath.split(File.separator);
+            String currentPath = "";
             for (String pathPart : filePathParts) {
                 currentPath += pathPart + File.separator;
                 File currentFile = new File(currentPath);
