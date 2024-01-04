@@ -1,5 +1,0 @@
-0 9 8  Two numbers are correct but wrongly placed
-8 3 5  One number is correct but wrongly placed
-0 9 3  Three numbers are correct. One is well placed and the other two are wrongly placed
-0 2 3  Two numbers are correct. One is well placed and the other is wrongly placed
-0 1 3  Two numbers are correct. One is well placed and the other is wrongly placed

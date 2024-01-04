@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
+<<<<<<< HEAD
 	<name>CrackTheCode</name>
+=======
+	<name>crack-the-code</name>
+>>>>>>> origin/main
 	<comment></comment>
 	<projects>
 	</projects>
@@ -22,7 +26,11 @@
 	</natures>
 	<filteredResources>
 		<filter>
+<<<<<<< HEAD
 			<id>1688513114272</id>
+=======
+			<id>1701381384391</id>
+>>>>>>> origin/main
 			<name></name>
 			<type>30</type>
 			<matcher>

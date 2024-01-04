@@ -1,1 +1,0 @@
-Riddle{solution=[2, 1, 7], codeLength=3, maxHints=9, base=10, clues=[7 4 0  One number is correct but wrongly placed, 0 8 5  Nothing is correct, 9 7 8  One number is correct but wrongly placed, 1 5 7  Two numbers are correct. One is well placed and the other is wrongly placed, 9 2 1  Two numbers are correct but wrongly placed], solvable=true, numPossibilities=null}

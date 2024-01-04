@@ -1,9 +1,0 @@
-8 4 5  Nothing is correct
-5 2 7  One number is correct but wrongly placed
-1 4 2  One number is correct but wrongly placed
-2 4 1  One number is correct but wrongly placed
-3 7 1  Two numbers are correct but wrongly placed
-2 2 7  One number is correct but wrongly placed
-1 7 9  Two numbers are correct but wrongly placed
-3 7 1  Two numbers are correct but wrongly placed
-5 0 1  Two numbers are correct but wrongly placed
