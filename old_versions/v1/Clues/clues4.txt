@@ -1,0 +1,5 @@
+1 8 3  Nothing is correct
+6 2 8  Two numbers are correct but wrongly placed
+2 8 9  Two numbers are correct. One is well placed and the other is wrongly placed
+7 2 9  Two numbers are correct but wrongly placed
+6 0 2  Two numbers are correct but wrongly placed
