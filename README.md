@@ -7,5 +7,10 @@
 - [CrackTheCodeV2](https://github.com/Danielnaor/CrackTheCodeV2)
 - [CrackTheCodeV3 (Under Development)](https://github.com/Danielnaor/CrackTheCodeV3)
 
+## Note on Functionality
+- **Solver Module:** Fully functional in all versions, providing accurate solutions to CrackTheCode puzzles.
+  
+- **Generator Module:** Partially implemented (work in progress). Stay tuned for the complete version in the newer releases.
+
 ## Contributions
 - [Daniel Naor](https://github.com/Danielnaor)
