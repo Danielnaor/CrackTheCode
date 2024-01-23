@@ -196,11 +196,14 @@ public class Solver {
        // update the number of solved indexes
          updateNumSolvedIndexes();
 
+        // add a tempo varibale to prevent the if statement from running 
+        boolean temp = false;
 
-        if(numSolvedIndexes == 0 && possibleCombinations != null && possibleCombinations.size() >= 1){
+        // use temp to prevent the if statement from running 
+        if(numSolvedIndexes == 0 && possibleCombinations != null && possibleCombinations.size() >= 1 && temp){
             int clueIndex = maxCorrectDigitsClue(); // the index of the clue that has the most correct digits
             int numCorrectDigits = clues.get(clueIndex).getCorrectDigits(); // the number of correct digits in the clue
-            useMostCorrectNumberClue(clueIndex);
+           // useMostCorrectNumberClue(clueIndex);
             updateBannedListFromUnknown();
 
             if(possibleCombinations.size() > 1){
@@ -1356,20 +1359,10 @@ public class Solver {
         return code;
     }
 
-    public Integer getNumberOfPossibleSolutions() {
-        if(solved){
-            
-                return 1;
-        } else {
-            if(possibleCombinations != null){
-                return possibleCombinations.size();
-            } else {
-                return null;
-            }
-
-        }
-
-
+       // get invalid combinations
+         public ArrayList<Integer[]> getInvalidCombinations() {
+          return invalidCombinations;
+         }
 
 
     }
@@ -1377,4 +1370,4 @@ public class Solver {
 
 
 
-}
+

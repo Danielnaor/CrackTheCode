@@ -40,7 +40,7 @@ public class temporary_main_for_testing {
     boolean solvable = false;
     
 
-        clues.add()
+        //clues.add();
         
         
         
