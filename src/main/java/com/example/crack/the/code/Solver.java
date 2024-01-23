@@ -67,7 +67,7 @@ public class Solver {
      private ArrayList<Integer> inCodeIndexUnknown = new ArrayList<>();
         
      //boolean for debug output
-        private static boolean debug = false;
+        private static boolean debug = true;
 
     // this will store the for sure invalid combinations
     private ArrayList<Integer[]> invalidCombinations = new ArrayList<>();
@@ -75,6 +75,9 @@ public class Solver {
     // the max number
     private int maxNumber = 0;
 
+    // a boolean to indicate if the solver should allow duplicates in the code
+    private boolean allowDuplicates = false;
+    
     private Validator validator;
 
     // logger
@@ -105,6 +108,8 @@ public class Solver {
         for (int i = 0; i < codeLength; i++) {
             this.bannedListPerIndex.add(new ArrayList<>());
         }        
+
+        this.allowDuplicates = false;
         
     }
 
@@ -281,6 +286,7 @@ public class Solver {
         validator = new Validator.Builder()
                 .code(code)
                 .clues(clues)
+              
                 .build();
 
 
@@ -321,6 +327,8 @@ public class Solver {
                 System.out.println("index " + i + ": " + bannedListPerIndex.get(i).toString());
             }
         }
+
+        
 
 
         
@@ -877,6 +885,65 @@ public class Solver {
             }
         }
         
+        // delete if the it's nto acordding allowDuplicates (both if allowDuplicates is true or false)
+     /*  add 
+                if(!allowDuplicates && hasDuplicates){
+                    possibleCombinations.remove(i);
+                    continue;
+                } 
+     
+     boolean hasDuplicates = false;
+        for (int i = possibleCombinations.size() - 1; i >= 0; i--) {
+            Integer[] combination = possibleCombinations.get(i);
+
+                
+
+            for (int j = i - 1; j >= 0; j--) {
+                if (Arrays.equals(possibleCombinations.get(i), possibleCombinations.get(j))) {
+                    hasDuplicates = true;
+                    break;
+                }
+             }
+             */
+
+//if(debug){
+    System.out.println("the size of the possible comb(inations before removing combinations that have duplicates): " + possibleCombinations.size());
+
+//}
+
+
+        // remove combinations that have duplicates (if allowDuplicates is false)
+             for(int i = possibleCombinations.size() - 1; i >= 0; i--){
+                
+                Integer[] combination = possibleCombinations.get(i);
+                System.out.println("i: "+ i + " " + Arrays.toString(combination));
+                boolean hasDuplicates = false;
+                for(int j = 0; j < combination.length; j++){
+                    for(int k = j + 1; k < combination.length; k++){
+                        if(combination[j] != null && combination[k] != null && combination[j] == combination[k]){
+                            hasDuplicates = true;
+                            break;
+                        }
+                    }
+                }
+
+                if(!allowDuplicates && hasDuplicates){
+                    possibleCombinations.remove(i);
+                    continue;
+                }
+            }
+
+
+            System.out.println("the size of the possible combinations after removing combinations that have duplicates: " + possibleCombinations.size());
+
+
+
+
+        
+
+
+
+
 
         // print the size of the possible combinations
         if(debug)
@@ -1288,6 +1355,26 @@ public class Solver {
     public Integer[] getCode() {
         return code;
     }
+
+    public Integer getNumberOfPossibleSolutions() {
+        if(solved){
+            
+                return 1;
+        } else {
+            if(possibleCombinations != null){
+                return possibleCombinations.size();
+            } else {
+                return null;
+            }
+
+        }
+
+
+
+
+    }
+
+
 
 
 }

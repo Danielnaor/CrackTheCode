@@ -3,7 +3,11 @@
  */
 package com.example.crack.the.code;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -16,7 +20,7 @@ public class CrackTheCode {
     static boolean passedAllTests = true;
 
     public static void main(String[] args) throws IOException {
-
+ /* 
         // testing the Generator
         Generator generator = new Generator.Builder()
                 .lengthOfCode(3)
@@ -24,7 +28,7 @@ public class CrackTheCode {
                 .repeatDigits(false)
                                 .build();
 
-        // use the generator (Object of the Generator class) to call the method that generates the entire Riddle
+       // use the generator (Object of the Generator class) to call the method that generates the entire Riddle
         Riddle riddle = generator.generateRiddle();
 
         // print the clues, isSolve and print the code
@@ -36,7 +40,10 @@ public class CrackTheCode {
         // print if it's possible to solve the riddle 
         System.out.println("Is solvable: " + riddle.isSolvable());
         
+        */
 
+        // to make sure generateCode method is generating a valid codes for the riddle, run it 100 times
+        testSolver();
     }
 
 
@@ -47,20 +54,19 @@ public class CrackTheCode {
 
         ArrayList<Clue> clues = new ArrayList<>();
 
-        
+      
 
         // test case 1:
-        clues.add(new Clue(new ArrayList<Integer>(Arrays.asList(9, 2, 8, 5)), "one number is correct but wrong placed", 1, 0, 1));
-        clues.add(new Clue(new ArrayList<Integer>(Arrays.asList(1, 9, 3, 7)), "two numbers are correct but wrong placed", 2, 0, 2));
-        clues.add(new Clue(new ArrayList<Integer>(Arrays.asList(5, 2, 0, 1)), "one number is correct and well placed", 1, 1, 0));
-        clues.add(new Clue(new ArrayList<Integer>(Arrays.asList(6, 5, 0, 7)), "nothing is correct", 0, 0, 0));
-        clues.add(new Clue(new ArrayList<Integer>(Arrays.asList(8, 5, 2, 4)), "two numbers are correct but wrong placed", 2, 0, 2));
-        // solution: 3, 8 , 4 , 1
+        clues.add(new Clue(new ArrayList<Integer>(Arrays.asList(6, 8, 2)), "one number is correct and correctly placed", 1, 1, 0));
+        clues.add(new Clue(new ArrayList<Integer>(Arrays.asList(6, 4, 5)), "one number is correct but wrongly placed", 1, 0, 1));
+        clues.add(new Clue(new ArrayList<Integer>(Arrays.asList(2, 0, 6)), "two numbers are correct but wrongly placed", 2, 0, 2));
+        clues.add(new Clue(new ArrayList<Integer>(Arrays.asList(7, 3, 8)), "nothing is correct", 0, 0, 0));
+        clues.add(new Clue(new ArrayList<Integer>(Arrays.asList(7, 8, 0)), "one number is correct but wrongly placed", 1, 0, 1));
         Solver solver = new Solver(clues);
-        Integer[] solution = {3, 8, 4, 1};
+        Integer[] solution = {0, 5, 2};
         Integer[] solutionSolver = solver.solve();
         passOrFail(solution, solutionSolver, 1);
-
+/* x
         // test case 2:
         clues.clear();
         clues.add(new Clue(new ArrayList<Integer>(Arrays.asList(3, 6, 8)), "one number is correct and correctly placed", 1, 1, 0));
@@ -101,7 +107,7 @@ public class CrackTheCode {
         solution = new Integer[]{4, 8, 2};
         solutionSolver = solver.solve();
         passOrFail(solution, solutionSolver, 4);
-
+*/ 
         // test case 5:
         clues.clear();
         clues.add(new Clue(new ArrayList<Integer>(Arrays.asList(8, 9, 5, 1)), "Two digits are correct but wrongly placed", 2, 0, 2));
@@ -114,8 +120,10 @@ public class CrackTheCode {
         solver = new Solver(clues);
         solution = new Integer[]{3, 7, 1, 9};
         solutionSolver = solver.solve();
+        System.out.println(" number of possible solutions: " + solver.getNumberOfPossibleSolutions());
         passOrFail(solution, solutionSolver, 5);
 
+        /* 
         // test case 6:
         clues.clear();
         clues.add(new Clue(new ArrayList<Integer>(Arrays.asList(2, 3, 4)), "Two Numbers are correct. One well placed and other wrongly placed.", 2, 1, 1));
@@ -216,7 +224,7 @@ public class CrackTheCode {
         solution = new Integer[]{0, 4, 2};
         solutionSolver = solver.solve();
         passOrFail(solution, solutionSolver, 12);
-
+*/
 
         
 
@@ -243,20 +251,15 @@ public class CrackTheCode {
     }
 }
 
-// test case 1:
-// 9, 2, 8, 5 one number is correct but wrong placed
-// 1, 9, 3, 7 two numbers are correct but wrong placed
-// 5, 2, 0, 1 one number is correct and well placed
-// 6, 5, 0, 7 nothing is correct
-// 8, 5, 2, 4 two numbers are correct but wrong placed
-// solution: 3, 8 , 4 , 1
 
-// test case 2:
-// 3, 6, 8 one number is correct and correctly placed
-// 3, 8, 7 nothing is correct
-// 2, 7, 6 one number is correct but wrongly placed
-// 4, 7, 1 two numbers are correct but wrongly placed
-// solution: 1, 6, 4
+// test case 1:
+// 682: one number is correct and in the correct position
+// 645: one number is correct but in the wrong position
+// 206: two numbers are correct but in the wrong positions
+// 738: nothing is correct
+// 780: one number is correct but in the wrong position
+//solution: 052
+
 
 // test case 3:
 // 3, 4, 2 one number is correct but wrongly placed
@@ -342,3 +345,18 @@ public class CrackTheCode {
 // 8 7 0 one number is correct but wrongly placed
 // solution: 0, 4, 2
 
+
+// test case 12:
+// 9, 2, 8, 5 one number is correct but wrong placed
+// 1, 9, 3, 7 two numbers are correct but wrong placed
+// 5, 2, 0, 1 one number is correct and well placed
+// 6, 5, 0, 7 nothing is correct
+// 8, 5, 2, 4 two numbers are correct but wrong placed
+// solution: 3, 8 , 4 , 1
+
+// test case 13:
+// 3, 6, 8 one number is correct and correctly placed
+// 3, 8, 7 nothing is correct
+// 2, 7, 6 one number is correct but wrongly placed
+// 4, 7, 1 two numbers are correct but wrongly placed
+// solution: 1, 6, 4

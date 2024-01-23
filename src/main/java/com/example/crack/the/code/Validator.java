@@ -29,7 +29,7 @@ public class Validator {
     private Integer[] code;
     private List<Clue> clues;
     private ArrayList<Integer[]> invalidCombinations;
-    private boolean debug = true;
+    private boolean debug = false;
 
    
     
@@ -250,19 +250,15 @@ public class Validator {
         int numCorrectDigits = 0;
         int numCorrectDigitsWellPlaced = 0;
         int numCorrectDigitsIncorrectlyPlaced = 0;
+        
+       // debug=false;
 
-        // in case invalid combination should add a debugging message:
-         /* 
-    String - whats wrong with the combination: - print if statement and the class name and line number
-    the expected value of correctDigits, wellPlacedDigits, incorrectlyPlacedDigits 
-    the actual value of correctDigits, wellPlacedDigits, incorrectlyPlacedDigits
-    the combination
-
-
-    */
 
 // convert the clue combination to an array
         Integer[] clueCombination = new Integer[clue.getCombination().size()];
+        clueCombination = clue.getCombination().toArray(clueCombination);
+        
+       
 
 
         for (int i = 0; i < clue.getCombination().size(); i++) {
@@ -388,6 +384,17 @@ public class Validator {
         
 
         if (numCorrectDigits != clue.getCorrectDigits() || numCorrectDigitsWellPlaced != clue.getWellPlacedDigits() || numCorrectDigitsIncorrectlyPlaced != clue.getIncorrectlyPlacedDigits()) {
+             
+                String debugMessage = "numCorrectDigits != clue.getCorrectDigits() || numCorrectDigitsWellPlaced != clue.getWellPlacedDigits() || numCorrectDigitsIncorrectlyPlaced != clue.getIncorrectlyPlacedDigits()) " +
+" + class: " + this.getClass().getName() + "\t line: " + Thread.currentThread().getStackTrace()[1].getLineNumber() 
+                + "\n" + "Expected - correctDigits: " + clue.getCorrectDigits() + " wellPlacedDigits: " + clue.getWellPlacedDigits() + " incorrectlyPlacedDigits: " + clue.getIncorrectlyPlacedDigits()
+                + "\n" + "Actual - correctDigits: " + numCorrectDigits + " wellPlacedDigits: " + numCorrectDigitsWellPlaced + " incorrectlyPlacedDigits: " + numCorrectDigitsIncorrectlyPlaced;
+
+                debugMessages.add(debugMessage);
+
+                if(debug)
+                    System.out.println(debugMessage);
+
 
 
 
