@@ -279,6 +279,16 @@ public class CrackTheCode {
 // 780: one number is correct but in the wrong position
 //solution: 052
 
+// test case 2:
+// 368: one number is correct and in the correct position
+// 387: nothing is correct
+// 276: one number is correct but in the wrong position
+// 471: two numbers are correct but in the wrong positions
+// solution: 164
+
+
+
+
 
 // test case 3:
 // 3, 4, 2 one number is correct but wrongly placed
@@ -337,8 +347,8 @@ public class CrackTheCode {
 // solution: 0, 0, 7, 7
 
 // test case 10: 
-// 0 0 0 0 nothing is correct
-// 1 1 1 1 nothing is correct
+// 0 0 0 0 Nothing is correct
+// 1 1 1 1 Nothing is correct
 // 2 2 2 2 nothing is correct
 // 3 3 3 3 nothing is correct
 // 4 4 4 4 nothing is correct
@@ -349,7 +359,7 @@ public class CrackTheCode {
 // solution: 9, 9, 9, 9
 
 // test case 11:
-// 9 2 8 5 one number is correct but wrong placed
+// 9 2 8 5 One number is correct but wrong placed
 // 1 9 3 7 two numbers are correct but wrong placed
 // 5 2 0 1 one number is correct and well placed
 // 6 5 0 7 nothing is correct
