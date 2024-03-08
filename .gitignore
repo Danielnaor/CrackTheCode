@@ -1,1 +1,11 @@
-/nbproject/
+
+*.class
+target/classes/.DS_Store
+*.DS_Store
+.DS_Store
+.DS_Store
+*.DS_Store
+.classpath
+.DS_Store
+/target/classes/com/example/crackthecode
+*.class
