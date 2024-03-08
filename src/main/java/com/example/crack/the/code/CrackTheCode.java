@@ -386,7 +386,8 @@ public class CrackTheCode {
 // solution: 1, 6, 4
 
 // test case 14:
-// 265 One number is correct and placed well
-// 387 Nothing is right
-// 234 One number is correct but wrongly placed
-// 471 Two numbers are correct but wrongly placed
+// 2 6 5 One number is correct and placed well
+// 3 8 7 Nothing is right
+// 2 3 4 One number is correct but wrongly placed
+// 4 7 1 Two numbers are correct but wrongly placed
+// solution: 1, 4, 5
