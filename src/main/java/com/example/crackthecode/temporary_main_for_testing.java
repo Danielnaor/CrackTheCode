@@ -40,9 +40,9 @@ public class temporary_main_for_testing {
     boolean solvable = false;
     
 
-        clues.add()
+       // clues.add()
         
-        
+         
         
         
         // if fullRiddle is not null check if it is solvanle if so print the clues and then wait for user input
